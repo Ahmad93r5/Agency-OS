@@ -1,4 +1,4 @@
-class jsonWebToken
+class JsonWebToken
   SECRET_KEY =  Rails.application.secret_key_base
 
   def self.encode(payload)
@@ -7,8 +7,8 @@ class jsonWebToken
   end
 
   def self.decode(token)
-  decoded = JWT.decode(token, SECRET_KEY, true, algorithm: "HS256")
-  decoded.first
-end
+    decoded = JWT.decode(token, SECRET_KEY, true, algorithm: "HS256")
+    decoded.first
+  end
 
 end

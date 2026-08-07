@@ -1,4 +1,8 @@
 class AuthenticationController < ApplicationController
+
+   skip_before_action :authorize_request, only: [:signup, :login]
+    # yaha islia {authorize_request} add kia ha kukay ya sb controller pa apply hoga 
+    
     def signup
       user = User.new(user_params)
       if user.save

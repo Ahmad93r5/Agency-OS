@@ -4,8 +4,7 @@ class ApplicationController < ActionController::API
              # Iska matlab Signup aur Login bhi token maangenge.
     
 
-    skip_before_action :authorize_request, only: [:signup, :login]
-    # yaha islia {authorize_request} add kia ha kukay ya sb controller pa apply hoga 
+   
 
     private 
 
