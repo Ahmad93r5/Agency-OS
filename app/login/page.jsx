@@ -28,7 +28,12 @@ function handleSubmit(e) {
     },
   }),
 })
-.then((response) => response.json())
+.then((response) => {
+   if (!response.ok) {
+    throw new Error("Login Failed")
+   }
+     return response.json();
+  })
 .then((data) => {
 localStorage.setItem("token", data.token);
   console.log("LOGIN SUCCESS");
@@ -67,7 +72,7 @@ router.push("/dashboard");
             id="email"
             name="email"
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-gray-500"
+            className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
           />
         </div>
 
@@ -86,13 +91,13 @@ router.push("/dashboard");
             id="password"
             name="password"
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-gray-500"
+            className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-gray-900 text-white py-2 rounded-md hover:bg-gray-800 transition"
+          className="w-full bg-gray-900 cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition"
         >
           Login
         </button>

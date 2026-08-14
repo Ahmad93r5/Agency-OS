@@ -14,7 +14,6 @@ const [password, setPassword] = useState("");
 
  function handleSubmit(e) {
   e.preventDefault();   
- //    console.log("Signup form submitted with:", { name, email, password });
       fetch("http://localhost:3001/signup", {
   method: "POST",
   headers: {
@@ -28,7 +27,12 @@ const [password, setPassword] = useState("");
         },
     }), 
  })
- .then(response => response.json())
+ .then(response => {
+   if(!response.ok) {
+    throw new Error("Something wet Wrong...Signup Failed")
+   }
+
+   return response.json(); })
  .then(data => {
    console.log("Signup successful:", data);
    router.push("/login");  
@@ -61,7 +65,7 @@ const [password, setPassword] = useState("");
             id="name"
             name="name"
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-gray-500"
+            className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
           />
         </div>
 
@@ -80,14 +84,14 @@ const [password, setPassword] = useState("");
             id="email"
             name="email"
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-gray-500"
+            className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
           />
         </div>
 
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm  font-medium text-gray-700 mb-1"
           >
             Password
           </label>
@@ -99,13 +103,13 @@ const [password, setPassword] = useState("");
             id="password"
             name="password"
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-gray-500"
+            className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-gray-900 text-white py-2 rounded-md hover:bg-gray-800 transition"
+          className="w-full bg-gray-900 cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition"
         >
           Sign up
         </button>

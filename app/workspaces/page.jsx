@@ -1,138 +1,93 @@
 "use client";
-import React from "react";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { apiRequest } from "@/lib/api";
 
+export default function Workspaces() {
+  const [workspaces, setWorkspaces] = useState([]);
+  const [workspaceName, setWorkspaceName] = useState("");
+  const [workspaceEditName, setWorkspaceEditName] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const router = useRouter();
 
-export default function Workspaces () {
-   
-    const [workspaces, setWorkspaces] = useState([]);
-    const [workspaceName, setWorkspaceName] = useState("");
-    const [workspaceEditName, setWorkspaceEditName] = useState("");
-    const [editingId, setEditingId] = useState(null);
-    const router = useRouter();
-    
-// Show all workspaces for the logged-in user
-         function fetchWorkspaces() {
+  // Show all workspaces for the logged-in user
+  function fetchWorkspaces() {
+    apiRequest("/workspaces")
+      .then((data) => {
+        console.log("API DATA:", data);
+        setWorkspaces(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
-      fetch("http://localhost:3001/workspaces", {
-          
-        method: "GET",
-        headers: {"Authorization": `Bearer ${token}`},     
-       })
-      .then((response) => response.json())
-      .then((data) => {     console.log("API DATA:", data);
-        setWorkspaces(data);})
-      .catch((error) => {console.error("Error:", error);}); 
-   } 
+    if (!token) {
+      router.push("/login");
+    } else {
+      fetchWorkspaces();
+    }
+  }, [router]);
 
- useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token)
-    { router.push("/login"); }
-    else { fetchWorkspaces(); }
- }, [router]);
-
- // create new workspace
+  // create new workspace
   function createWorkspace() {
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:3001/workspaces", {
+    apiRequest("/workspaces", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         name: workspaceName,
-        }),
+      }),
     })
-      .then((response) => {
-        if(!response.ok) {
-          throw new Error("Failed to create workspace");
-        }
-        return response.json();
-      })
-
       .then((data) => {
-        console.log("WORKSPACE CREATED:", data);
         setWorkspaceName(""); // create workspace and clear the input field
         fetchWorkspaces(); // Refresh the list of workspaces after creation
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-    }
+  }
 
-    // edit workspace
-    function editWorkspace( workspaceId) {
-        const token = localStorage.getItem("token");
-        fetch(`http://localhost:3001/workspaces/${workspaceId}`, {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: workspaceEditName,
-          }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to edit workspace");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("WORKSPACE EDITED:", data);
-            console.log(data.errors);
-            setWorkspaceEditName(""); 
-              setEditingId(null);
-            fetchWorkspaces(); // Refresh the list of workspaces after editing
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
-
-   //delete workspace
-   function deleteWorkspace(workspaceId) {
-    const token = localStorage.getItem("token");
-    fetch(`http://localhost:3001/workspaces/${workspaceId}`, {  
-
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },     
+  // edit workspace
+  function editWorkspace(workspaceId) {
+    apiRequest(`/workspaces/${workspaceId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        name: workspaceEditName,
+      }),
     })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Failed to delete workspace");
-                }
-                console.log("WORKSPACE DELETED");
-                fetchWorkspaces();
-              })            
-              .catch((error) => {
-                console.error("Error:", error);
-              }) 
- }
+      .then((data) => {
+        setWorkspaceEditName("");
+        setEditingId(null);
+        fetchWorkspaces(); // Refresh the list of workspaces after editing
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
+  //delete workspace
+  function deleteWorkspace(workspaceId) {
+    apiRequest(`/workspaces/${workspaceId}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        fetchWorkspaces();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
- // logout function
-        function Logout() {
-        localStorage.removeItem("token")
-            router.push("/login") 
-        }
+  // logout function
+  function Logout() {
+    localStorage.removeItem("token");
+    router.push("/login");
+  }
 
-
-
-
-    
-
-   return (
-  <div className="min-h-screen bg-gray-100">
-
+  return (
+    <div className="min-h-screen bg-gray-100">
       <main className="flex-1 p-8">
-
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">
           Welcome to Workspaces
         </h1>
@@ -142,13 +97,9 @@ export default function Workspaces () {
             key={workspace.id}
             className="bg-white p-4 mb-4 rounded border flex items-center justify-between"
           >
-
-            <p className="font-medium text-gray-800">
-              {workspace.name}
-            </p>
+            <p className="font-medium text-gray-800">{workspace.name}</p>
 
             <div className="flex gap-2">
-
               {editingId === workspace.id ? (
                 <>
                   <input
@@ -183,13 +134,11 @@ export default function Workspaces () {
               >
                 Delete
               </button>
-
             </div>
           </div>
         ))}
 
         <div className="bg-white p-5 rounded border mt-6">
-
           <label
             htmlFor="workspaceName"
             className="block mb-2 font-medium text-gray-700"
@@ -198,7 +147,6 @@ export default function Workspaces () {
           </label>
 
           <div className="flex gap-2">
-
             <input
               type="text"
               value={workspaceName}
@@ -215,7 +163,6 @@ export default function Workspaces () {
             >
               Create
             </button>
-
           </div>
         </div>
 
@@ -225,10 +172,7 @@ export default function Workspaces () {
         >
           Logout
         </button>
-
       </main>
-
     </div>
-  
-); 
+  );
 }
