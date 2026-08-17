@@ -10,4 +10,7 @@ Rails.application.routes.draw do
     post "/login", to: "authentication#login"
     get "/users", to: "users#index"
     post "/workspaces", to: "workspaces#create"
+
+    resources :workspaces do
+     resources :Clients, only: [:index, :show, :create]
 end

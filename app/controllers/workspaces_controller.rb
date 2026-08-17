@@ -2,7 +2,6 @@ class WorkspacesController < ApplicationController
 
     def create
         workspace = @current_user.workspaces.new(workspace_params)
-                #   @current_user--> jo abi login howa ha 
         if workspace.save
             render json: workspace, status: :created
         else
@@ -21,7 +20,6 @@ class WorkspacesController < ApplicationController
 
     def show
         workspace = @current_user.workspaces.find(params[:id])
-        # Iska matlab User #2 User #1 ka workspace access/update/delete nahi kar sakta, kyun ke search sirf current user's workspaces mein ho rahi hai.
         if workspace.nil?
             render json: { error: "Workspace not found" }, status: :not_found
         else
