@@ -1,12 +1,6 @@
 "use client";
-import React from "react";
-import Navbar from "@/components/layout/Navbar";
-import Sidebar from "@/components/layout/Sidebar";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-
-
 
 export default function Dashboard() {
 
