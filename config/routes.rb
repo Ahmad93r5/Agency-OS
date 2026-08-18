@@ -12,5 +12,6 @@ Rails.application.routes.draw do
     post "/workspaces", to: "workspaces#create"
 
     resources :workspaces do
-     resources :Clients, only: [:index, :show, :create]
+     resources :clients, only: [:index, :show, :create, :update, :destroy]
+    end
 end

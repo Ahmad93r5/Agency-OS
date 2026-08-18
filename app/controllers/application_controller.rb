@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::API
     before_action :authorize_request
-            
+             rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  
+
+
+
     private 
 
     def authorize_request
@@ -16,4 +21,8 @@ class ApplicationController < ActionController::API
   render json: { error: "Unauthorized" }, status: :unauthorized
     
     end
+
+        def record_not_found
+            render json: { error: "Client not found" }, status: :not_found
+       end
 end

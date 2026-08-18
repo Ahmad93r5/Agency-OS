@@ -1,30 +1,45 @@
 class ClientsController < ApplicationController
-  before_action :set_workspace
+  before_action :current_workspace
 
   def index
-    clients = @workspace.clients
-    render json: clients
-  end
+  @clients = @workspace.clients
+end
 
   def show
-    client = @workspace.clients.find(params[:id])
-    render json: client
+    @client = @workspace.clients.find(params[:id])
   end
 
   def create
-    client = @workspace.clients.new(client_params)
-
-    if client.save
-      render json: client, status: :created
+    @client = @workspace.clients.new(client_params)
+    if @client.save
+       render :create, status: :created
     else
-      render json: { errors: client.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
+  def update
+   @client = @workspace.clients.find(params[:id])
+
+     if @client.update(client_params)
+        render :update, status: :ok
+      else
+       render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
+     end
+  end
+
+ def destroy
+  client = @workspace.clients.find(params[:id])
+  client.destroy
+
+  render json: { message: "Client deleted successfully" }, status: :ok
+end
+
+
   private
 
-  def set_workspace
-    @workspace = current_user.workspaces.find(params[:workspace_id])
+  def current_workspace
+    @workspace = @current_user.workspaces.find(params[:workspace_id])
   end
 
   def client_params

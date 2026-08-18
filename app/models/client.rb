@@ -3,5 +3,5 @@ class Client < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true
-  validate  :phone, presence: true
+  validates  :phone, presence: true
 end
