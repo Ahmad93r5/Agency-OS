@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiRequest } from "@/lib/api";
+import { apiRequest } from "@/lib/api"; 
 import WorkspacesUI from "@/components/Workspace/WorkspacesUI";
 
 export default function Workspaces() {
