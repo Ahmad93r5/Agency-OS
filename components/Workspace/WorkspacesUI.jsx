@@ -1,9 +1,17 @@
 export default function WorkspacesUI({
-   workspaces, workspaceName, setWorkspaceName, workspaceEditName, setWorkspaceEditName, editingId,
-   setEditingId, createWorkspace, editWorkspace, deleteWorkspace, Logout
-})
-{
-     return (
+  workspaces,
+  workspaceName,
+  setWorkspaceName,
+  workspaceEditName,
+  setWorkspaceEditName,
+  editingId,
+  setEditingId,
+  createWorkspace,
+  editWorkspace,
+  deleteWorkspace,
+  Logout
+}) {
+  return (
     <div className="min-h-screen bg-gray-100">
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -17,7 +25,15 @@ export default function WorkspacesUI({
           >
             <p className="font-medium text-gray-800">{workspace.name}</p>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              {/* ✅ View Clients Button */}
+              <a
+                href={`/workspaces/${workspace.id}/clients`}
+                className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition"
+              >
+                View Clients
+              </a>
+
               {editingId === workspace.id ? (
                 <>
                   <input
@@ -29,7 +45,7 @@ export default function WorkspacesUI({
 
                   <button
                     onClick={() => editWorkspace(workspace.id)}
-                    className="bg-green-600 text-white px-3 py-1 rounded"
+                    className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
                   >
                     Save
                   </button>
@@ -40,7 +56,7 @@ export default function WorkspacesUI({
                     setEditingId(workspace.id);
                     setWorkspaceEditName(workspace.name);
                   }}
-                  className="bg-blue-600 text-white px-3 py-1 rounded"
+                  className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
                 >
                   Edit
                 </button>
@@ -48,7 +64,7 @@ export default function WorkspacesUI({
 
               <button
                 onClick={() => deleteWorkspace(workspace.id)}
-                className="bg-red-600 text-white px-3 py-1 rounded"
+                className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
               >
                 Delete
               </button>
@@ -72,12 +88,12 @@ export default function WorkspacesUI({
               id="workspaceName"
               name="workspaceName"
               required
-              className="border px-3 py-2 rounded"
+              className="border px-3 py-2 rounded w-full"
             />
 
             <button
               onClick={createWorkspace}
-              className="bg-green-600 text-white px-4 py-2 rounded"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
             >
               Create
             </button>
@@ -86,7 +102,7 @@ export default function WorkspacesUI({
 
         <button
           onClick={Logout}
-          className="mt-6 bg-gray-800 text-white px-4 py-2 rounded"
+          className="mt-6 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
         >
           Logout
         </button>
