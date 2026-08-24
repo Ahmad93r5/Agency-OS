@@ -9,7 +9,10 @@ export default function WorkspacesUI({
   createWorkspace,
   editWorkspace,
   deleteWorkspace,
-  Logout
+  Logout,
+  loading,
+  error,
+  setError        
 }) {
   return (
     <div className="min-h-screen bg-gray-100">
@@ -18,7 +21,33 @@ export default function WorkspacesUI({
           Welcome to Workspaces
         </h1>
 
-        {workspaces.map((workspace) => (
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 flex items-center justify-between">
+            <span>{error}</span>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-700 hover:text-red-900"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-8">
+            <p className="text-gray-500">Loading workspaces...</p>
+          </div>
+        )}
+
+        {!loading && Array.isArray(workspaces) && workspaces.length === 0 && (
+          <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+            <p className="text-gray-500">No workspaces yet. Create your first workspace!</p>
+          </div>
+        )}
+
+        {!loading && Array.isArray(workspaces) && workspaces.map((workspace) => (
           <div
             key={workspace.id}
             className="bg-white p-4 mb-4 rounded border flex items-center justify-between"
@@ -26,7 +55,7 @@ export default function WorkspacesUI({
             <p className="font-medium text-gray-800">{workspace.name}</p>
 
             <div className="flex gap-2 items-center">
-              {/* ✅ View Clients Button */}
+              {/* View Clients Button */}
               <a
                 href={`/workspaces/${workspace.id}/clients`}
                 className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition"
@@ -72,6 +101,7 @@ export default function WorkspacesUI({
           </div>
         ))}
 
+        {/* Create Workspace */}
         <div className="bg-white p-5 rounded border mt-6">
           <label
             htmlFor="workspaceName"
