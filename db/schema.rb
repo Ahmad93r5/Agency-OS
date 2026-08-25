@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_130656) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_25_113403) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,6 +22,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_130656) do
     t.datetime "updated_at", null: false
     t.bigint "workspace_id", null: false
     t.index ["workspace_id"], name: "index_clients_on_workspace_id"
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_notes_on_client_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -41,5 +49,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_130656) do
   end
 
   add_foreign_key "clients", "workspaces"
+  add_foreign_key "notes", "clients"
   add_foreign_key "workspaces", "users"
 end

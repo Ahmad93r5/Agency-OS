@@ -23,7 +23,7 @@ end
 
      if @client.update(client_params)
         render :update, status: :ok
-      else
+     else
        render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
      end
   end

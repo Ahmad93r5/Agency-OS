@@ -1,5 +1,4 @@
 class WorkspacesController < ApplicationController
-
     def create
         workspace = @current_user.workspaces.new(workspace_params)
         if workspace.save
@@ -8,12 +7,12 @@ class WorkspacesController < ApplicationController
             render json: { errors: workspace.errors.full_messages }, status: :unprocessable_entity
         end
     end
-    
+
     def index
         workspaces = @current_user.workspaces
         if workspaces.empty?
             render json: { message: "No workspaces found" }, status: :ok
-           else
+        else
           render json: workspaces, status: :ok
         end
     end
@@ -34,13 +33,13 @@ class WorkspacesController < ApplicationController
         else
             render json: { errors: workspace.errors.full_messages }, status: :unprocessable_entity
         end
-    end 
+    end
 
     def destroy
         workspace = @current_user.workspaces.find(params[:id])
         if workspace.nil?
             render json: { error: "Workspace not found" }, status: :not_found
-          else
+        else
             workspace.destroy
             head :no_content
         end
@@ -51,5 +50,4 @@ class WorkspacesController < ApplicationController
   def workspace_params
     params.require(:workspace).permit(:name)
   end
-
 end
