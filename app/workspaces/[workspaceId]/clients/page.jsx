@@ -3,6 +3,7 @@
 import {useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { apiRequest } from "@/lib/api";
+import Link from "next/link";
 
 export default function Clients() {
   const { workspaceId } = useParams();
@@ -172,6 +173,12 @@ export default function Clients() {
             </div>
 
             <div className="flex gap-2">
+              {/* add client notes */}
+                  <Link
+                     href={`/workspaces/${workspaceId}/clients/${client.id}/notes`}
+                     className="bg-purple-600 text-white px-3 py-1 rounded-md hover:bg-purple-700 transition text-sm">
+                     View Notes
+                   </Link>
               <button
                 onClick={() => {
                   setEditForm({
