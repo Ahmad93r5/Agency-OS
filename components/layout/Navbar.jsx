@@ -1,17 +1,15 @@
 import React from "react";
 import Link from "next/link";    
-export default function Navbar() {
+export default function Navbar({ user }) {
+  
  return (
   <nav className="bg-white border-b border-gray-200">
     <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 
-      <Link
-        href="/"
-        className="text-lg font-semibold text-gray-800"
-      >
-        Agency OS
-      </Link>
-
+         <span className="text-lg font-semibold text-gray-800">
+          {user ? `Welcome, ${user.name}` : "Welcome, Guest"}
+       </span>
+  
       <ul className="flex items-center gap-6 text-sm">
         <li>
           <Link

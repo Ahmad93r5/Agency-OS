@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { apiRequest } from "@/lib/api";
 import SignupForm from "@/components/Auth/SignupForm";
 
 export default function Signup() {
@@ -10,38 +11,31 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    fetch("http://localhost:3001/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user: {
-          name,
-          email,
-          password,
-        },
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Something went wrong... Signup Failed");
-        }
-
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Signup successful:", data);
-        router.push("/login");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    try {
+      const response = await apiRequest("/signup", {
+        method: "POST",
+        body: JSON.stringify({
+          user: { name, email, password },
+        }),
       });
-  }
+
+      console.log("Signup successful:", response);
+      router.push("/login");
+    } catch (error) {
+      console.error("Signup error:", error);
+      setError("Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SignupForm
@@ -52,6 +46,9 @@ export default function Signup() {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
+       loading={loading}  
+       error={error}        
+       setError={setError} 
     />
   );
 }

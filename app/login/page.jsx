@@ -1,61 +1,54 @@
 "use client";
-// import Link from "next/link";
-import LoginForm from "@/components/Auth/LoginForm";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { apiRequest } from "@/lib/api";
+import LoginForm from "@/components/Auth/LoginForm";
 
 
 export default function Login() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-const router = useRouter();  // Initialize the router for navigation
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
+    try {
+      const data = await apiRequest("/login", {
+        method: "POST",
+        body: JSON.stringify({ user: { email, password } }),
+      });
 
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        console.log("LOGIN SUCCESS");
+        router.push("/dashboard");
+      } else {
+        setError("No token received");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-function handleSubmit(e) {
-  e.preventDefault();   
-   fetch("http://localhost:3001/login", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    user: {
-      email,
-      password,
-    },
-  }),
-})
-.then((response) => {
-   if (!response.ok) {
-    throw new Error("Login Failed")
-   }
-     return response.json();
-  })
-.then((data) => {
-localStorage.setItem("token", data.token);
-  console.log("LOGIN SUCCESS");
-router.push("/dashboard");
-})
-.catch((error) => {
-  console.error("Error:", error);
-});
-
-}
-
-
-
- return (
-   <LoginForm
-     email={email}
-     setEmail={setEmail}
-     password={password}
-     setPassword={setPassword}
-     handleSubmit={handleSubmit}
-
-   />
-
- )
+  return (
+    <LoginForm
+      email={email}
+      setEmail={setEmail}
+      password={password}
+      setPassword={setPassword}
+      handleSubmit={handleSubmit}
+      loading={loading}   
+      error={error}       
+      setError={setError} 
+    />
+  );
 }

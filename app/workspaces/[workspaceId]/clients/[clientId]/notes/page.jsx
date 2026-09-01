@@ -3,16 +3,20 @@
   import { useParams } from "next/navigation";
   import { apiRequest } from "@/lib/api";
   import consumer from "@/app/javascript/channels/consumer.js";
+  import NotesUI from "@/components/Client Notes/NoteUI.jsx";
 
 
   export default function NotesPage() {
         const {workspaceId, clientId} =useParams();
 
 
-          const [notes, setNotes] = useState([]);
+         const [notes, setNotes] = useState([]);
         const [content, setContent] = useState("");
         const [loading, setLoading] = useState(true);
         const [isAdding, setIsAdding] = useState(false);
+          const [editNoteId, setEditNoteId] = useState(null);
+        const [editContent, setEditContent] = useState("");
+
         const [error, setError] = useState(null);
       
 
@@ -41,12 +45,17 @@
               if (clientId) {
           fetchNotes();
 
-                  const subscription = consumer.subscriptions.create("NotesChannel", {
+                  const subscription = consumer.subscriptions.create(
+                    {
+                     channel: "NotesChannel",
+                     client_id: clientId   
+                    },
+         {
               connected() {
                 console.log("Connected to noteschannel");
               },
         received(data) {
-          alert("✅ New note received!");  
+          // alert("✅ New note received!");  
           console.log("Real-time notereceived:", data);
           setNotes((prevNotes) => [data, ...prevNotes]);
         }
@@ -57,6 +66,7 @@
           };
               }
                 }, [clientId]);
+
 
         const handleAddNote = async (e) => {
               e.preventDefault();
@@ -82,58 +92,68 @@
               } finally {
                 setIsAdding(false);
               }
-  };
+        };
+       
+        // DElete note
+        const handleDeleteNote = async (noteId) => {
+          try {
+            await apiRequest(
+              `/workspaces/${workspaceId}/clients/${clientId}/notes/${noteId}`,
+              {
+                method: "DELETE",
+              }
+            );
+            setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+          } catch (error) {
+            console.error("failed to delete note:", error);
+            setError("failed to delete note, try again.");
+          }   
+        }
+          // update note
+        const handleUpdateNote = async (noteId, updatedContent) => {
+          
+          try {
+            await apiRequest(
+              `/workspaces/${workspaceId}/clients/${clientId}/notes/${noteId}`,
+              {
+                method: "PUT",
+                body: JSON.stringify({  
+                  note: { content: updatedContent }
+                })
+              }
+            );
+            setNotes((prevNotes) =>
+              prevNotes.map((note) =>
+                note.id === noteId ? { ...note, content: updatedContent } : note
+              )
+            );
+            setEditNoteId(null);
+            setEditContent("");
+          } catch (error) {
+            console.error("failed to update note:", error);
+            setError("failed to update note, try again.");
+          }   
+        }
 
 
 
-      return(
-          <div className="min-h-screen bg-gray-100">
-        <main className="flex-1 p-8">
-          <h1 className="text-2xl font-semibold text-gray-800 mb-6">Notes</h1>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 flex items-center justify-between">
-              <span>{error}</span>
-              <button onClick={() => setError(null)} className="text-red-700 hover:text-red-900">✕</button>
-            </div>
-          )}
-
-          <form onSubmit={handleAddNote} className="bg-white p-4 rounded-lg border mb-6">
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write a note..."
-              rows={3}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
-              required
-            />
-            <button
-              type="submit"
-              disabled={isAdding}
-              className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
-            >
-              {isAdding ? "Adding..." : "Add Note"}
-            </button>
-          </form>
-
-          {loading && <p className="text-gray-500">Loading notes...</p>}
-
-          {!loading && notes.length === 0 && (
-            <div className="bg-white rounded-lg border p-8 text-center">
-              <p className="text-gray-500">No notes yet. Add your first note!</p>
-            </div>
-          )}
-
-          {!loading && notes.map((note) => (
-            <div key={note.id} className="bg-white p-4 mb-3 rounded-lg border">
-              <p className="text-gray-800">{note.content}</p>
-              <p className="text-sm text-gray-500 mt-1">
-                {new Date(note.created_at).toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </main>
-      </div>
-
-      );
-  }
+       return (
+    <NotesUI
+      notes={notes}
+      loading={loading}
+      error={error}
+      setError={setError}
+      content={content}
+      setContent={setContent}
+      isAdding={isAdding}
+      handleAddNote={handleAddNote}
+      handleDeleteNote={handleDeleteNote}
+      handleUpdateNote={handleUpdateNote}
+       editNoteId={editNoteId}
+      setEditNoteId={setEditNoteId}
+      editContent={editContent}
+      setEditContent={setEditContent}
+    />
+  );
+}

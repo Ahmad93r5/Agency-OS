@@ -1,20 +1,37 @@
 import Link from "next/link";
 
 export default function SignupForm({
-
-      name, setName, email,  setEmail, password, setPassword, handleSubmit,
-})
-{
-    return (
-          <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+  name,
+  setName,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  handleSubmit,
+  loading,    
+  error,      
+  setError,
+}) {
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">
           Create your account
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 flex items-center justify-between">
+            <span>{error}</span>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-700 hover:text-red-900"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="name"
@@ -22,7 +39,6 @@ export default function SignupForm({
             >
               Name
             </label>
-
             <input
               type="text"
               value={name}
@@ -41,7 +57,6 @@ export default function SignupForm({
             >
               Email
             </label>
-
             <input
               type="email"
               value={email}
@@ -60,7 +75,6 @@ export default function SignupForm({
             >
               Password
             </label>
-
             <input
               type="password"
               value={password}
@@ -74,23 +88,19 @@ export default function SignupForm({
 
           <button
             type="submit"
-            className="w-full bg-gray-900 cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition"
+            disabled={loading}
+            className="w-full bg-gray-900 cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition disabled:opacity-50"
           >
-            Sign up
+            {loading ? "Signing up..." : "Sign up"}
           </button>
-
         </form>
 
         <div className="text-center mt-5 text-sm text-gray-600">
           Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-gray-900 font-medium hover:underline"
-          >
+          <Link href="/login" className="text-gray-900 font-medium hover:underline">
             Login
           </Link>
         </div>
-
       </div>
     </div>
   );
