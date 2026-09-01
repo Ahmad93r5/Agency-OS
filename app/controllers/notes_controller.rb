@@ -15,6 +15,26 @@ class NotesController < ApplicationController
     end
     end
 
+    def destroy
+      @note = @client.notes.find(params[:id])
+      if @note.destroy
+        render json: { message: "Note deleted successfully" }, status: :ok
+      else
+        render json: { errors: @note.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      @note = @client.notes.find(params[:id])
+      if @note.update(note_params)
+        render json: @note, status: :ok
+      else
+        render json: { errors: @note.errors.full_messages }, status: :unprocessable_entity
+      end
+    end 
+    
+   
+
     private
      def current_client
     @client = Client.find(params[:client_id]) 

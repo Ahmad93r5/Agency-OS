@@ -1,22 +1,21 @@
 class Note < ApplicationRecord
-  belongs_to :client
   validates :content, presence: true
 
-   has_many :notes, dependent: :destroy 
+  belongs_to :client
 
-    after_create_commit :broadcast_note
+  after_create_commit :broadcast_note
 
   private
 
-  def broadcast_note
-    NotesChannel.broadcast_to(
-      "notes_channel",
-      {
-        id: id,
-        content: content,
-        client_id: client_id,
-        created_at: created_at
-      }
-    )
-  end
+ def broadcast_note
+  ActionCable.server.broadcast(
+    "notes_channel_#{client_id}",
+    {
+      id: id,
+      content: content,
+      client_id: client_id,
+      created_at: created_at
+    }
+  )
 end
+end     
