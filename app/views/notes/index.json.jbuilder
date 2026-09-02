@@ -7,4 +7,6 @@ json.array! @notes do |note|
     json.id note.client.id
     json.name note.client.name
   end
+    json.file_url note.file.attached? ? rails_blob_url(note.file) : nil
+
 end
