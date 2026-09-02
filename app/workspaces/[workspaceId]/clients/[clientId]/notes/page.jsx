@@ -16,6 +16,7 @@
         const [isAdding, setIsAdding] = useState(false);
           const [editNoteId, setEditNoteId] = useState(null);
         const [editContent, setEditContent] = useState("");
+        const [file, setFile] = useState(null); 
 
         const [error, setError] = useState(null);
       
@@ -69,30 +70,37 @@
 
 
         const handleAddNote = async (e) => {
-              e.preventDefault();
-              if (!content.trim()) return;
+  e.preventDefault();
+  if (!content.trim()) return;
 
-        setIsAdding(true);
-        setError(null);
-              try {
-                await apiRequest(
-                  `/workspaces/${workspaceId}/clients/${clientId}/notes`,
+  setIsAdding(true);
+  setError(null);
+
+           try {
+            const formData = new FormData();
+              formData.append("note[content]", content);
+                 if (file) {
+                   formData.append("note[file]", file);
+                   }
+
+              await apiRequest(
+                   `/workspaces/${workspaceId}/clients/${clientId}/notes`,
                   {
-                    method: "POST",
-                    body: JSON.stringify({
-                      note: { content }
-                    })
-                  }
-                );
-                setContent("");
-                await fetchNotes();
-              } catch (error) {
-                console.error("Failed to add note:", error);
-                setError("Failed to add note. Please try again.");
-              } finally {
-                setIsAdding(false);
-              }
-        };
+                        method: "POST",
+                        body: formData,
+                        
+                   }
+          );
+    setContent("");
+    setFile(null);   
+    await fetchNotes();
+           } catch (error) {
+             console.error("Failed to add note:", error);
+             setError("Failed to add note. Please try again.");
+           } finally {
+             setIsAdding(false);
+           }
+         };
        
         // DElete note
         const handleDeleteNote = async (noteId) => {
@@ -135,6 +143,10 @@
           }   
         }
 
+        const handleFileChange = (e) => {
+            setFile(e.target.files[0]);
+        };
+
 
 
 
@@ -154,6 +166,8 @@
       setEditNoteId={setEditNoteId}
       editContent={editContent}
       setEditContent={setEditContent}
+      handleFileChange={handleFileChange}  
+      file={file}                           
     />
   );
 }

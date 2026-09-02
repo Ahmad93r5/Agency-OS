@@ -15,6 +15,8 @@ export default function NotesUI({
   setEditNoteId,
   editContent,
   setEditContent,
+  handleFileChange,   
+  file                 
 }) {
   return (
     <div className="min-h-screen bg-gray-100">
@@ -30,7 +32,7 @@ export default function NotesUI({
           </div>
         )}
 
-        {/* Add Note */}
+        {/*  Add Note Form with File Input */}
         <form onSubmit={handleAddNote} className="bg-white p-4 rounded-lg border mb-6">
           <textarea
             value={content}
@@ -40,6 +42,14 @@ export default function NotesUI({
             className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
             required
           />
+
+          {/*  File Input */}
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
+
           <button
             type="submit"
             disabled={isAdding}
@@ -93,9 +103,24 @@ export default function NotesUI({
                     </div>
                   </div>
                 ) : (
-              
+                  // View Mode
                   <div>
                     <p className="text-gray-800">{note.content}</p>
+
+                    {/*  Show File if attached */}
+                    {note.file_url && (
+                      <div className="mt-2">
+                        <a
+                          href={note.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline text-sm flex items-center gap-1"
+                        >
+                           View Attachment
+                        </a>
+                      </div>
+                    )}
+
                     <p className="text-sm text-gray-500 mt-1">
                       {new Date(note.created_at).toLocaleString()}
                     </p>
@@ -103,7 +128,7 @@ export default function NotesUI({
                 )}
               </div>
 
-              
+              {/* Action Buttons */}
               {editNoteId !== note.id && (
                 <div className="flex gap-2 ml-4">
                   <button
