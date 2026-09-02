@@ -51,6 +51,7 @@ group :development, :test do
   
   # For webscoket/actioncable
   gem 'redis', '~> 5.0'
-gem 'fiddle'
-
+  gem 'fiddle'
+  gem 'groq'
+  gem 'dotenv-rails'
 end
