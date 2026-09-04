@@ -10,7 +10,7 @@ export default function Navbar({ user }) {
           {user ? `Welcome, ${user.name}` : "Welcome, Guest"}
        </span>
   
-      <ul className="flex items-center gap-6 text-sm">
+      {/* <ul className="flex items-center gap-6 text-sm">
         <li>
           <Link
             href="/"
@@ -37,7 +37,7 @@ export default function Navbar({ user }) {
             Contact
           </Link>
         </li>
-      </ul>
+      </ul> */}
 
     </div>
   </nav>

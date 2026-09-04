@@ -56,7 +56,6 @@
                 console.log("Connected to noteschannel");
               },
         received(data) {
-          // alert("✅ New note received!");  
           console.log("Real-time notereceived:", data);
           setNotes((prevNotes) => [data, ...prevNotes]);
         }
