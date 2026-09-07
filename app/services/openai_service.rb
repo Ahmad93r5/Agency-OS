@@ -13,9 +13,15 @@ class OpenaiService
       model_id: "openai/gpt-oss-20b"
     )
     response["content"]
+  rescue Faraday::TooManyRequestsError => e
+    Rails.logger.error "Groq Rate Limit: #{e.message}"
+    " Rate limit exceeded. Please wait a moment and try again."
+  rescue Faraday::ClientError, Faraday::ServerError => e
+    Rails.logger.error "Groq API Error: #{e.message}"
+    " AI service is currently unavailable. Please try again later."
   rescue => e
     Rails.logger.error "Groq API Error: #{e.message}"
-    "Failed to generate briefing. Please try again."
+    " Failed to generate briefing. Please try again."
   end
 
   private
