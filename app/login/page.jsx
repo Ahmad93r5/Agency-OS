@@ -26,6 +26,9 @@ export default function Login() {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+    // token store in cookie for server-side access beacause server action cannot read localStorage
+        document.cookie = `token=${data.token}; path=/; max-age=86400`;
+
         console.log("LOGIN SUCCESS");
         router.push("/dashboard");
       } else {

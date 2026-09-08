@@ -1,9 +1,11 @@
   "use client"
-  import { useEffect, useState } from "react";
+  import { useEffect, useState, useTransition  } from "react";
   import { useParams } from "next/navigation";
   import { apiRequest } from "@/lib/api";
   import consumer from "@/app/javascript/channels/consumer.js";
   import NotesUI from "@/components/Client Notes/NoteUI.jsx";
+  import { generateBriefing } from "@/app/actions/notes"; 
+
 
 
   export default function NotesPage() {
@@ -12,13 +14,19 @@
 
          const [notes, setNotes] = useState([]);
         const [content, setContent] = useState("");
-        const [loading, setLoading] = useState(true);
         const [isAdding, setIsAdding] = useState(false);
-          const [editNoteId, setEditNoteId] = useState(null);
+        const [editNoteId, setEditNoteId] = useState(null);
         const [editContent, setEditContent] = useState("");
         const [file, setFile] = useState(null); 
+        
+        const [loading, setLoading] = useState(true);
+       const [error, setError] = useState(null);
 
-        const [error, setError] = useState(null);
+        const [briefing, setBriefing] = useState(null);
+        const [briefingError, setBriefingError] = useState(null);
+        const [isPending, startTransition] = useTransition();
+
+
       
 
         console.log("workspaceId:", workspaceId, "clientId:", clientId);
@@ -69,11 +77,11 @@
 
 
         const handleAddNote = async (e) => {
-  e.preventDefault();
-  if (!content.trim()) return;
+              e.preventDefault();
+              if (!content.trim()) return;
 
-  setIsAdding(true);
-  setError(null);
+              setIsAdding(true);
+              setError(null);
 
            try {
             const formData = new FormData();
@@ -146,11 +154,29 @@
             setFile(e.target.files[0]);
         };
 
+        // Ai Briefing 
+        const handleGenerateBriefing = () => {
+              setBriefingError(null);
+              setBriefing(null);
+          
+              startTransition(async () => {
+                try {
+                  const result = await generateBriefing(workspaceId, clientId);
+                  if (result.error) {
+                    setBriefingError(result.error);
+                  } else {
+                    setBriefing(result.briefing);
+                  }
+                } catch (err) {
+                  setBriefingError("Failed to generate briefing. Please try again.");
+                }
+              });
+            };
 
 
 
-       return (
-    <NotesUI
+      return (
+   <NotesUI
       notes={notes}
       loading={loading}
       error={error}
@@ -161,12 +187,18 @@
       handleAddNote={handleAddNote}
       handleDeleteNote={handleDeleteNote}
       handleUpdateNote={handleUpdateNote}
-       editNoteId={editNoteId}
+      editNoteId={editNoteId}
       setEditNoteId={setEditNoteId}
       editContent={editContent}
       setEditContent={setEditContent}
-      handleFileChange={handleFileChange}  
-      file={file}                           
+      handleFileChange={handleFileChange}
+      file={file}
+      briefing={briefing}
+      isLoadingBriefing={isPending}   
+      briefingError={briefingError}
+      setBriefingError={setBriefingError}
+      handleGenerateBriefing={handleGenerateBriefing}
+      setBriefing={setBriefing}
     />
-  );
+);
 }
