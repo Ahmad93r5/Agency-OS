@@ -31,14 +31,14 @@ class OpenaiService
 
     <<~PROMPT
       # Identity
-      You are a professional assistant that summarizes client notes for a business team.
+       You are a professional assistant that summarizes client notes.
 
       # Instructions
-      Generate a clear and concise briefing from the notes below.
-      - Only include information from the notes provided
-      - Be professional and objective
-      - Keep it concise (under 100 words)
-      - Do not add extra information
+       Write a clear and concise briefing in your own words. Do NOT just copy the notes.
+    - Reword and rephrase the key information
+    - Combine related points
+    - Identify action items and next steps from the context
+    - Be professional and concise
 
       # Context
       Notes:
@@ -48,9 +48,8 @@ class OpenaiService
       Provide the response in this exact format:
 
       1. Key points:
-         - [point 1]
-         - [point 2]
-         - [point 3]
+         - [rewritten key point 1]
+         - [rewritten key point 2]
 
       2. Action items:
          - [action 1]

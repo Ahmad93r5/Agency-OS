@@ -1,21 +1,22 @@
-Workspace ==>  Errro in validation --- correct error name  & error message disappear after some time
-client --> popup  to center & phone optional bug
+Workspace ==>  Errro in validation --- correct error name  & error message disappear after some time ✅
+client --> popup  to center & phone optional bug ✅
 
-HTTp Method coorect way ma lihknay
+HTTp Method coorect way ma lihknay  ✅
 
-workspcae -- Jbuilder files 
-find or find_BY
-controller update krna 
-error handling with find 
+workspcae -- Jbuilder files✅
+ use partial in jbuilder✅
 
-workspace = @current_user.workspaces.find(params[:id])  --> in before action 
+find or find_BY✅
+controller update krna ✅
 
-use partial in jbuilder 
+workspace = @current_user.workspaces.find(params[:id])  --> in before action ✅
+
+ 
 
 schema.rb --> add same validation in db
 
 frontend----------
-search ---> middelware
+search ---> middelware  ✅
 logout -- create component
 
 create data state global --- (edit, destroy)

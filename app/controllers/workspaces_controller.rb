@@ -1,51 +1,45 @@
 class WorkspacesController < ApplicationController
-    def create
-        workspace = @current_user.workspaces.new(workspace_params)
-        if workspace.save
-            render json: workspace, status: :created
-        else
-            render json: { errors: workspace.errors.full_messages }, status: :unprocessable_entity
-        end
-    end
+  before_action :set_workspace, only: [:show, :update, :destroy]
 
-    def index
-        workspaces = @current_user.workspaces
-        if workspaces.empty?
-            render json: { message: "No workspaces found" }, status: :ok
-        else
-          render json: workspaces, status: :ok
-        end
-    end
+  def index
+    @workspaces = @current_user.workspaces  
+    render :index                           
+  end
 
-    def show
-        workspace = @current_user.workspaces.find(params[:id])
-        if workspace.nil?
-            render json: { error: "Workspace not found" }, status: :not_found
-        else
-            render json: workspace, status: :ok
-        end
-    end
+  def show
+    render :show   
+  end
 
-    def update
-        workspace = @current_user.workspaces.find(params[:id])
-        if workspace.update(workspace_params)
-            render json: workspace, status: :ok
-        else
-            render json: { errors: workspace.errors.full_messages }, status: :unprocessable_entity
-        end
+  def create
+    @workspace = @current_user.workspaces.new(workspace_params)   
+    if @workspace.save
+      render :create, status: :created                          
+    else
+      render json: { errors: @workspace.errors.full_messages }, status: :unprocessable_entity
     end
+  end
 
-    def destroy
-        workspace = @current_user.workspaces.find(params[:id])
-        if workspace.nil?
-            render json: { error: "Workspace not found" }, status: :not_found
-        else
-            workspace.destroy
-            head :no_content
-        end
+  def update
+    if @workspace.update(workspace_params)
+      render :update, status: :ok                                 
+    else
+      render json: { errors: @workspace.errors.full_messages }, status: :unprocessable_entity
     end
+  end
 
-    private
+  def destroy
+    @workspace.destroy
+    head :no_content
+  end
+
+  private
+
+  def set_workspace
+    @workspace = @current_user.workspaces.find_by(id: params[:id])
+    if @workspace.nil?
+      render json: { error: "Workspace not found" }, status: :not_found
+    end
+  end
 
   def workspace_params
     params.require(:workspace).permit(:name)

@@ -1,45 +1,63 @@
 class ClientsController < ApplicationController
   before_action :current_workspace
+  before_action :set_client, only: [:show, :update, :destroy]
 
   def index
-  @clients = @workspace.clients
-end
+    @clients = @workspace.clients
+    render :index
+  end
 
   def show
-    @client = @workspace.clients.find(params[:id])
+    render :show
   end
 
   def create
     @client = @workspace.clients.new(client_params)
+
     if @client.save
-       render :create, status: :created
+      render :create, status: :created
     else
       render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def update
-   @client = @workspace.clients.find(params[:id])
-
-     if @client.update(client_params)
-        render :update, status: :ok
-     else
-       render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
-     end
+    if @client.update(client_params)
+      render :update, status: :ok
+    else
+      render json: { errors: @client.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
- def destroy
-  client = @workspace.clients.find(params[:id])
-  client.destroy
+  def destroy
+    @client.destroy
+    head :no_content
+  end
 
-  render json: { message: "Client deleted successfully" }, status: :ok
-end
 
+   def briefings
+     @briefings = @client.briefing_documents.limit(10)
+     render json: @briefings
+      rescue => e
+        render json: { error: "Failed to fetch briefings" }, status: :internal_server_error
+   end
 
   private
 
   def current_workspace
-    @workspace = @current_user.workspaces.find(params[:workspace_id])
+    @workspace = @current_user.workspaces.find_by(id: params[:workspace_id])
+
+    if @workspace.nil?
+      render json: { error: "Workspace not found" }, status: :not_found
+    end
+  end
+
+  def set_client
+    @client = @workspace.clients.find_by(id: params[:id])
+
+    if @client.nil?
+      render json: { error: "Client not found" }, status: :not_found
+    end
   end
 
   def client_params

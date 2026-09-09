@@ -1,6 +1,4 @@
 json.array! @clients do |client|
-  json.id client.id
-  json.name client.name
-  json.email client.email
-  json.phone client.phone
+  json.partial! "client", client: client
+  json.notes_count client.notes.count
 end

@@ -15,7 +15,19 @@ Rails.application.routes.draw do
   # Workspaces + Clients + Notes 
   resources :workspaces do
     resources :clients do
-      resources :notes, only: [:index, :create, :update, :destroy]
+      resources :notes, only: [:index, :create, :update, :destroy] do
+        collection do
+          post :generate_briefing 
+        end
+          
+      end
     end
   end
+  
+   resources :clients do
+       member do
+        get :briefings
+      end
+   end
+
 end
