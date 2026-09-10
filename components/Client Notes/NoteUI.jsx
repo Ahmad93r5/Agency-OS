@@ -22,7 +22,8 @@ export default function NotesUI({
   briefingError,
   setBriefingError,
   handleGenerateBriefing,
-  setBriefing
+  setBriefing,
+  briefingHistory
 }) {
   return (
     <div className="min-h-screen bg-gray-100">
@@ -109,6 +110,7 @@ export default function NotesUI({
             </div>
           )}
 
+
           
             {briefing && (
               <div className="bg-gray-50 text-gray-800 p-4 rounded-md border relative">
@@ -126,6 +128,22 @@ export default function NotesUI({
               </div>
             )}
         </div>
+
+          {briefingHistory && briefingHistory.length > 0 && (
+          <div className="bg-white p-4 rounded-lg border mb-6">
+            <h3 className="font-semibold text-gray-800 mb-3">📜 Briefing History</h3>
+            {briefingHistory.map((item) => (
+              <div key={item.id} className="bg-gray-50 p-3 rounded-md border mb-2">
+                <p className="text-sm text-gray-500 mb-1">
+                  {new Date(item.created_at).toLocaleString()}
+                </p>
+                <p className="text-gray-800 whitespace-pre-wrap text-sm">
+                  {item.content}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/*  Notes List */}
         {!loading &&

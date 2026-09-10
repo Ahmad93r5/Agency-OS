@@ -104,16 +104,27 @@ export default function ClientsUI({
             </div>
           ))}
 
-        {/* ➕ Add Dialog */}
+        {/*  Add Dialog  */}
         <dialog
           ref={addDialogRef}
-          className="rounded-lg shadow-lg border border-gray-200 p-0 backdrop:bg-black/50"
+          className="rounded-xl shadow-2xl border border-gray-200 p-0 backdrop:bg-black/50 w-full max-w-md mx-auto"
         >
-          <div className="w-full max-w-md p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Add New Client</h3>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-800">Add New Client</h3>
+              <button
+                onClick={() => addDialogRef.current.close()}
+                className="text-gray-400 hover:text-gray-600 transition text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="name"
                   type="text"
@@ -121,11 +132,14 @@ export default function ClientsUI({
                   value={addForm.name}
                   onChange={(e) => setAddForm({ ...addForm, name: e.target.value })}
                   required
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="email"
                   type="email"
@@ -133,9 +147,10 @@ export default function ClientsUI({
                   value={addForm.email}
                   onChange={(e) => setAddForm({ ...addForm, email: e.target.value })}
                   required
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                 <input
@@ -144,21 +159,22 @@ export default function ClientsUI({
                   placeholder="Enter client phone (optional)"
                   value={addForm.phone}
                   onChange={(e) => setAddForm({ ...addForm, phone: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
+
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => addDialogRef.current.close()}
-                  className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition"
+                  className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isAdding}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+                  className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-medium"
                 >
                   {isAdding ? "Saving..." : "Save"}
                 </button>
@@ -167,16 +183,27 @@ export default function ClientsUI({
           </div>
         </dialog>
 
-        {/* ✏️ Edit Dialog */}
+        {/*  Edit Dialog  */}
         <dialog
           ref={editDialogRef}
-          className="rounded-lg shadow-lg border border-gray-200 p-0 backdrop:bg-black/50"
+          className="rounded-xl shadow-2xl border border-gray-200 p-0 backdrop:bg-black/50 w-full max-w-md mx-auto"
         >
-          <div className="w-full max-w-md p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Edit Client</h3>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-800">Edit Client</h3>
+              <button
+                onClick={() => editDialogRef.current.close()}
+                className="text-gray-400 hover:text-gray-600 transition text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="name"
                   type="text"
@@ -184,11 +211,14 @@ export default function ClientsUI({
                   value={editForm.name}
                   onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                   required
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="email"
                   type="email"
@@ -196,9 +226,10 @@ export default function ClientsUI({
                   value={editForm.email}
                   onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                   required
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                 <input
@@ -207,21 +238,22 @@ export default function ClientsUI({
                   placeholder="Enter client phone (optional)"
                   value={editForm.phone}
                   onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
+
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => editDialogRef.current.close()}
-                  className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition"
+                  className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isEditing}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+                  className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-medium"
                 >
                   {isEditing ? "Updating..." : "Update"}
                 </button>
@@ -230,27 +262,37 @@ export default function ClientsUI({
           </div>
         </dialog>
 
-        {/* 🗑️ Delete Dialog */}
+        {/*  Delete Dialog  */}
         <dialog
           ref={deleteDialogRef}
-          className="rounded-lg shadow-lg border border-gray-200 p-0 backdrop:bg-black/50"
+          className="rounded-xl shadow-2xl border border-gray-200 p-0 backdrop:bg-black/50 w-full max-w-sm mx-auto"
         >
-          <div className="w-full max-w-sm p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Delete Client</h3>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-800">Delete Client</h3>
+              <button
+                onClick={() => deleteDialogRef.current.close()}
+                className="text-gray-400 hover:text-gray-600 transition text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+
             <p className="text-gray-600 mb-6">
               Are you sure you want to delete this client? This action cannot be undone.
             </p>
+
             <div className="flex gap-3">
               <button
                 onClick={() => deleteDialogRef.current.close()}
-                className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition"
+                className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex-1 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition disabled:opacity-50"
+                className="flex-1 bg-red-600 text-white px-4 py-2.5 rounded-lg hover:bg-red-700 transition disabled:opacity-50 font-medium"
               >
                 {isDeleting ? "Deleting..." : "Delete"}
               </button>

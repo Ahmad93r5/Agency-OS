@@ -25,7 +25,8 @@
         const [briefing, setBriefing] = useState(null);
         const [briefingError, setBriefingError] = useState(null);
         const [isPending, startTransition] = useTransition();
-
+ 
+         const [briefingHistory, setBriefingHistory] = useState([]);
 
       
 
@@ -166,6 +167,7 @@
                     setBriefingError(result.error);
                   } else {
                     setBriefing(result.briefing);
+                     await fetchBriefingHistory();
                   }
                 } catch (err) {
                   setBriefingError("Failed to generate briefing. Please try again.");
@@ -173,6 +175,20 @@
               });
             };
 
+              const fetchBriefingHistory = async () => {
+                try {
+                  const data = await apiRequest(`/clients/${clientId}/briefings`);
+                  setBriefingHistory(data);
+                } catch (error) {
+                  console.error("Failed to fetch briefing history:", error);
+                }
+              };
+
+        useEffect(() => {
+          if (clientId) {
+            fetchBriefingHistory();
+          }
+        }, [clientId]);
 
 
       return (
@@ -199,6 +215,7 @@
       setBriefingError={setBriefingError}
       handleGenerateBriefing={handleGenerateBriefing}
       setBriefing={setBriefing}
+      briefingHistory={briefingHistory}
     />
 );
 }

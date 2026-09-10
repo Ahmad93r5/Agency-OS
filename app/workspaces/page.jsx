@@ -48,6 +48,10 @@ export default function Workspaces() {
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to refresh workspaces");
+
+       setTimeout(() => {
+          setError(null);
+        }, 3000);
     }
   };
 
@@ -63,6 +67,10 @@ export default function Workspaces() {
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to create workspace");
+
+       setTimeout(() => {
+          setError(null);
+        }, 3000);
     }
   };
 
@@ -78,7 +86,11 @@ export default function Workspaces() {
       await refreshWorkspaces();
     } catch (error) {
       console.error("Error:", error);
-      setError("Failed to update workspace");
+      setError("Failed to edit workspace");
+
+         setTimeout(() => {
+          setError(null);
+        }, 3000);
     }
   };
 
@@ -92,6 +104,10 @@ export default function Workspaces() {
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to delete workspace");
+
+       setTimeout(() => {
+          setError(null);
+        }, 3000);
     }
   };
 

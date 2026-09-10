@@ -12,6 +12,7 @@ export async function apiRequest(url, options = {}) {
     },
   });
 
+
   if (!response.ok) {
     throw new Error("Api Request Failed");
   }

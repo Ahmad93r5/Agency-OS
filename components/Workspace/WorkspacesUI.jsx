@@ -12,7 +12,7 @@ export default function WorkspacesUI({
   Logout,
   loading,
   error,
-  setError        
+  setError
 }) {
   return (
     <div className="min-h-screen bg-gray-100">
@@ -41,12 +41,14 @@ export default function WorkspacesUI({
           </div>
         )}
 
+        {/* Empty State */}
         {!loading && Array.isArray(workspaces) && workspaces.length === 0 && (
           <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
             <p className="text-gray-500">No workspaces yet. Create your first workspace!</p>
           </div>
         )}
 
+        {/* Workspaces List */}
         {!loading && Array.isArray(workspaces) && workspaces.map((workspace) => (
           <div
             key={workspace.id}
@@ -64,28 +66,53 @@ export default function WorkspacesUI({
               </a>
 
               {editingId === workspace.id ? (
-                <>
-                  <input
-                    type="text"
-                    value={workspaceEditName}
-                    onChange={(e) => setWorkspaceEditName(e.target.value)}
-                    className="border px-2 py-1 rounded"
-                  />
-
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={workspaceEditName}
+                      onChange={(e) => {
+                        setWorkspaceEditName(e.target.value);
+                        e.target.setCustomValidity("");
+                      }}
+                      onInvalid={(e) => {
+                        e.target.setCustomValidity("Please fill out this field.");
+                      }}
+                      className="border text-black px-2 py-1 rounded pr-8"
+                      autoFocus
+                      required
+                    />
+                    <button
+                      onClick={() => {
+                        setEditingId(null);
+                        setWorkspaceEditName("");
+                      }}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-600 transition text-sm"
+                    >
+                      ✕
+                    </button>
+                  </div>
                   <button
-                    onClick={() => editWorkspace(workspace.id)}
-                    className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                    onClick={() => {
+                      const input = document.querySelector('input[type="text"]');
+                      if (!input.value.trim()) {
+                        input.reportValidity();
+                        return;
+                      }
+                      editWorkspace(workspace.id);
+                    }}
+                    className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition text-sm"
                   >
                     Save
                   </button>
-                </>
+                </div>
               ) : (
                 <button
                   onClick={() => {
                     setEditingId(workspace.id);
                     setWorkspaceEditName(workspace.name);
                   }}
-                  className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+                  className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition text-sm"
                 >
                   Edit
                 </button>
@@ -101,7 +128,6 @@ export default function WorkspacesUI({
           </div>
         ))}
 
-        {/* Create Workspace */}
         <div className="bg-white p-5 rounded border mt-6">
           <label
             htmlFor="workspaceName"
@@ -111,18 +137,33 @@ export default function WorkspacesUI({
           </label>
 
           <div className="flex gap-2">
-            <input
-              type="text"
-              value={workspaceName}
-              onChange={(e) => setWorkspaceName(e.target.value)}
-              id="workspaceName"
-              name="workspaceName"
-              required
-              className="border px-3 py-2 rounded w-full"
-            />
+            <div className="flex-1">
+              <input
+                type="text"
+                value={workspaceName}
+                onChange={(e) => {
+                  setWorkspaceName(e.target.value);
+                  e.target.setCustomValidity("");
+                }}
+                onInvalid={(e) => {
+                  e.target.setCustomValidity("Please fill out this field.");
+                }}
+                id="workspaceName"
+                name="workspaceName"
+                required
+                className="border text-black px-3 py-2 rounded w-full"
+              />
+            </div>
 
             <button
-              onClick={createWorkspace}
+              onClick={(e) => {
+                const input = document.getElementById("workspaceName");
+                if (!input.value.trim()) {
+                  input.reportValidity();
+                  return;
+                }
+                createWorkspace();
+              }}
               className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
             >
               Create
