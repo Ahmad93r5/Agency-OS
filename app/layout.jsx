@@ -11,19 +11,23 @@ export default function RootLayout({ children }) {
    const [user, setUser] = useState(null);
   
      useEffect(() => {
-            
-      const fetchUser = async () => {
-        try {
-          const data = await apiRequest("/users");
-          setUser(data.user);
-        }
-        catch (error) {
-          console.error("failed to fetch user", error);
-        } 
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        return;
       }
-  
-      fetchUser();
-     }, []); 
+
+      try {
+        const data = await apiRequest("/users");
+        setUser(data.user);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
 
 

@@ -155,6 +155,22 @@
             setFile(e.target.files[0]);
         };
 
+        const fetchBriefingHistory = async () => {
+          try {
+            const data = await apiRequest(`/workspaces/${workspaceId}/clients/${clientId}/briefings`);
+            setBriefingHistory(data);
+          } catch (error) {
+            console.error("Failed to fetch briefing history:", error);
+          }
+        };
+
+              useEffect(() => {
+                if (clientId) {
+                  fetchBriefingHistory();
+                }
+              }, [clientId]);
+
+
         // Ai Briefing 
         const handleGenerateBriefing = () => {
               setBriefingError(null);
@@ -175,20 +191,6 @@
               });
             };
 
-              const fetchBriefingHistory = async () => {
-                try {
-                  const data = await apiRequest(`/clients/${clientId}/briefings`);
-                  setBriefingHistory(data);
-                } catch (error) {
-                  console.error("Failed to fetch briefing history:", error);
-                }
-              };
-
-        useEffect(() => {
-          if (clientId) {
-            fetchBriefingHistory();
-          }
-        }, [clientId]);
 
 
       return (
