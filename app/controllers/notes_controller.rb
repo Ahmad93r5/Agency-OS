@@ -35,19 +35,19 @@ class NotesController < ApplicationController
     head :no_content
   end
 
-  # AI Briefing Generation
-  def generate_briefing
-    notes = @client.notes.order(created_at: :desc)
-    service = OpenaiService.new
-    briefing = service.generate_briefing(notes)
-   
-     @client.briefing_doucuments.create(content: briefing) if briefing.present?
+    # AI Briefing Generation
+    def generate_briefing
+      notes = @client.notes.order(created_at: :desc)
+      service = OpenaiService.new
+      briefing = service.generate_briefing(notes)
+    
+     @client.briefing_documents.create(content: briefing)
 
-    render json: { briefing: briefing }
-  rescue => e
-    Rails.logger.error "Error generating briefing: #{e.message}"
-    render json: { error: "Failed to generate briefing. Please try again." }, status: :internal_server_error
-  end
+      render json: { briefing: briefing }
+    rescue => e
+      Rails.logger.error "Error generating briefing: #{e.message}"
+      render json: { error: "Failed to generate briefing. Please try again." }, status: :internal_server_error
+    end
 
   private
 

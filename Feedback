@@ -11,12 +11,17 @@ controller update krna ✅
 
 workspace = @current_user.workspaces.find(params[:id])  --> in before action ✅
 
- 
-
-schema.rb --> add same validation in db
+schema.rb --> add same validation in db ✅
 
 frontend----------
 search ---> middelware  ✅
 logout -- create component
 
 create data state global --- (edit, destroy)
+-----------------------------------------------------------------------
+
+Correct Whole UI
+Add back btn on every page
+show clients thrrough sidebar btn (client)
+try to generate Ai briefinf of single note
+
