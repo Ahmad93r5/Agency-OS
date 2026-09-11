@@ -1,27 +1,24 @@
 class ApplicationController < ActionController::API
     before_action :authorize_request
-             # ApplicationController mein laga diya hai.
-             # Iska matlab Signup aur Login bhi token maangenge.
-    
+    rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
-    skip_before_action :authorize_request, only: [:signup, :login]
-    # yaha islia {authorize_request} add kia ha kukay ya sb controller pa apply hoga 
 
-    private 
+    private
 
     def authorize_request
           token = request.headers["Authorization"]&.split(" ")&.last
-        #  Jab frontend ya Postman protected API call karega, wo header bhejega:
-        # Space ke basis par tod dega: --> (split)
-        # Last element de dega: ---> .last
-        # safe navigation operator --> &.
+        #  Jab frontend ya Postman protected API call karega, wo header bhejega
+
         payload = JsonWebToken.decode(token)
-        # Yani payload variable ke andar ab token ka data aa gaya.    
+        # Yani payload variable ke andar ab token ka data aa gaya.
         @current_user = User.find(payload["user_id"])
         # @current_user instance variable hai.
 
         rescue JWT::DecodeError, ActiveRecord::RecordNotFound
   render json: { error: "Unauthorized" }, status: :unauthorized
-    
     end
+
+        def record_not_found
+            render json: { error: "Client not found" }, status: :not_found
+       end
 end
