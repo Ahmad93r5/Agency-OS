@@ -35,6 +35,12 @@ return (
           >
             Settings
           </Link>
+            <Link
+            href="/settings"
+            className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition"
+          >
+            Clients
+          </Link>
         </li>
       </ul>
     </nav>
