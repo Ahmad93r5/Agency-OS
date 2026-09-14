@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiRequest } from "@/lib/api"; 
 import WorkspacesUI from "@/components/Workspace/WorkspacesUI";
+import Navbar from "@/components/layout/Navbar";
 
 export default function Workspaces() {
   const [workspaces, setWorkspaces] = useState([]);
@@ -118,6 +119,8 @@ export default function Workspaces() {
   };
 
   return (
+    <>
+    
     <WorkspacesUI
       workspaces={workspaces}
       workspaceName={workspaceName}
@@ -129,9 +132,12 @@ export default function Workspaces() {
       createWorkspace={createWorkspace}
       editWorkspace={editWorkspace}
       deleteWorkspace={deleteWorkspace}
-      Logout={Logout}
       loading={loading}
       error={error}
     />
+    <Navbar  
+          Logout={Logout}
+          />
+    </>
   );
 }

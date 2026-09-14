@@ -28,6 +28,12 @@ export default function NotesUI({
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="flex-1 p-8">
+            <button
+                   onClick={() => window.history.back()}
+                   className="mb-4 inline-flex items-center gap-1 bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-100 hover:text-gray-900 transition text-sm shadow-sm">
+                Back  
+            </button>
+
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">Notes</h1>
 
         {/* Error */}

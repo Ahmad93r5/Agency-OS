@@ -1,59 +1,85 @@
 "use client";
-import { useEffect } from "react";   
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { apiRequest } from "@/lib/api";
+import DashboardUI from "@/components/Dashboard/DashboardUI";
 
 export default function Dashboard() {
+  const router = useRouter();
 
-const router = useRouter();  
+  const [user, setUser] = useState(null);
+  const [stats, setStats] = useState({ workspaces: 0, clients: 0, notes: 0 });
+  const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    router.push("/login");
-  }
-}, [router]); //“React, is useEffect ke andar router use ho raha hai. Agar router ki value change ho, to effect dobara chala dena.”
+  //  Fetch dashboard data
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/login");
+        return;
+      }
 
-// for logout functionality & remove token from local storage
-function handleLogout() {
-  localStorage.removeItem("token");
-  router.push("/login");
-}
+      try {
+        // User info
+        const userData = await apiRequest("/users");
+        setUser(userData.user);
 
+        // Workspaces
+        const workspaces = await apiRequest("/workspaces");
 
- return (
-    
+        // Clients aur Notes — pehle workspace se
+        let totalClients = 0;
+        let totalNotes = 0;
+
+        if (workspaces.length > 0) {
+          const workspaceId = workspaces[0].id;
+
+          try {
+            const clients = await apiRequest(
+              `/workspaces/${workspaceId}/clients`
+            );
+            totalClients = clients.length;
+
+            // Har client ke notes count karo
+            for (const client of clients) {
+              const notes = await apiRequest(
+                `/workspaces/${workspaceId}/clients/${client.id}/notes`
+              );
+              totalNotes += notes.length;
+            }
+          } catch (err) {
+            console.error("Failed to fetch clients/notes:", err);
+          }
+        }
+
+        setStats({
+          workspaces: workspaces.length,
+          clients: totalClients,
+          notes: totalNotes,
+        });
+      } catch (error) {
+        console.error("Failed to load dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [router]);
+
   
-  <div className="min-h-screen bg-gray-100">
+  //  Quick action navigation
+  const handleNavigate = (path) => {
+    router.push(path);
+  };
 
-    <header className="bg-white border-b border-gray-200">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-
-        <h1 className="text-xl font-semibold text-gray-800">
-          Dashboard
-        </h1>
-
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition"
-        >
-          Logout
-        </button>
-
-      </div>
-    </header>
-    
-
-    <main className="max-w-6xl mx-auto px-6 py-8">
-      <h2 className="text-2xl font-semibold text-gray-800">
-        Welcome to the dashboard!
-      </h2>
-
-      <p className="mt-2 text-gray-600">
-        Manage your workspaces and projects from here.
-      </p>
-
-    </main>
-
-  </div>
-);
+  return (
+    <DashboardUI
+      user={user}
+      stats={stats}
+      loading={loading}
+      handleNavigate={handleNavigate}
+    />
+  );
 }

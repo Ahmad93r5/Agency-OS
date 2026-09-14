@@ -9,7 +9,6 @@ export default function WorkspacesUI({
   createWorkspace,
   editWorkspace,
   deleteWorkspace,
-  Logout,
   loading,
   error,
   setError
@@ -171,12 +170,7 @@ export default function WorkspacesUI({
           </div>
         </div>
 
-        <button
-          onClick={Logout}
-          className="mt-6 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
-        >
-          Logout
-        </button>
+      
       </main>
     </div>
   );

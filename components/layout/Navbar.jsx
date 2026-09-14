@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";    
-export default function Navbar({ user }) {
+export default function Navbar({ user, Logout }) {
+  
   
  return (
   <nav className="bg-white border-b border-gray-200">
@@ -10,34 +11,12 @@ export default function Navbar({ user }) {
           {user ? `Welcome, ${user.name}` : "Welcome, Guest"}
        </span>
   
-      {/* <ul className="flex items-center gap-6 text-sm">
-        <li>
-          <Link
-            href="/"
-            className="text-gray-600 hover:text-gray-900 transition"
-          >
-            Home
-          </Link>
-        </li>
-
-        <li>
-          <Link
-            href="/about"
-            className="text-gray-600 hover:text-gray-900 transition"
-          >
-            About
-          </Link>
-        </li>
-
-        <li>
-          <Link
-            href="/contact"
-            className="text-gray-600 hover:text-gray-900 transition"
-          >
-            Contact
-          </Link>
-        </li>
-      </ul> */}
+       <button
+          onClick={Logout}
+          className="mt-6 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
+        >
+          Logout
+        </button>
 
     </div>
   </nav>
