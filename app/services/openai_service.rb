@@ -1,7 +1,7 @@
 class OpenaiService
   def initialize
     Groq.configure do |config|
-      config.api_key = ENV['GROQ_API_KEY']
+      config.api_key = ENV["GROQ_API_KEY"]
     end
     @client = Groq::Client.new
   end
@@ -9,7 +9,7 @@ class OpenaiService
   def generate_briefing(notes)
     prompt = build_prompt(notes)
     response = @client.chat(
-      [{ role: "user", content: prompt }],
+      [ { role: "user", content: prompt } ],
       model_id: "openai/gpt-oss-20b"
     )
     response["content"]

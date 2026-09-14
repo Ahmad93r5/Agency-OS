@@ -20,4 +20,4 @@ class Note < ApplicationRecord
     }
   )
 end
-end     
+end

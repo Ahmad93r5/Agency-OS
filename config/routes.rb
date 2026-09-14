@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount ActionCable.server => '/cable'
+  mount ActionCable.server => "/cable"
 
   get "up" => "rails/health#show", as: :rails_health_check
 
@@ -12,10 +12,10 @@ Rails.application.routes.draw do
   resources :workspaces do
     resources :clients do
       member do
-        get :briefings       
+        get :briefings
       end
 
-      resources :notes, only: [:index, :create, :update, :destroy] do
+      resources :notes, only: [ :index, :create, :update, :destroy ] do
         collection do
           post :generate_briefing
         end

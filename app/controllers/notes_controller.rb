@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
   before_action :authorize_request
   before_action :current_client
-  before_action :set_note, only: [:show, :update, :destroy]
+  before_action :set_note, only: [ :show, :update, :destroy ]
 
   def index
     @notes = @client.notes.order(created_at: :desc)
@@ -40,7 +40,7 @@ class NotesController < ApplicationController
       notes = @client.notes.order(created_at: :desc)
       service = OpenaiService.new
       briefing = service.generate_briefing(notes)
-    
+
      @client.briefing_documents.create(content: briefing)
 
       render json: { briefing: briefing }

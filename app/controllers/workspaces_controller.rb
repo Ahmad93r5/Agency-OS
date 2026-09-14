@@ -1,19 +1,19 @@
 class WorkspacesController < ApplicationController
-  before_action :set_workspace, only: [:show, :update, :destroy]
+  before_action :set_workspace, only: [ :show, :update, :destroy ]
 
   def index
-    @workspaces = @current_user.workspaces  
-    render :index                           
+    @workspaces = @current_user.workspaces
+    render :index
   end
 
   def show
-    render :show   
+    render :show
   end
 
   def create
-    @workspace = @current_user.workspaces.new(workspace_params)   
+    @workspace = @current_user.workspaces.new(workspace_params)
     if @workspace.save
-      render :create, status: :created                          
+      render :create, status: :created
     else
       render json: { errors: @workspace.errors.full_messages }, status: :unprocessable_entity
     end
@@ -21,7 +21,7 @@ class WorkspacesController < ApplicationController
 
   def update
     if @workspace.update(workspace_params)
-      render :update, status: :ok                                 
+      render :update, status: :ok
     else
       render json: { errors: @workspace.errors.full_messages }, status: :unprocessable_entity
     end

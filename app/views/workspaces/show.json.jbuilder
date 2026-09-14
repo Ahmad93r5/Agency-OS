@@ -5,7 +5,7 @@ json.clients do
     json.name client.name
     json.email client.email
     json.phone client.phone if client.phone.present?
-    
+
 
     json.notes do
       json.array! client.notes.order(created_at: :desc) do |note|
