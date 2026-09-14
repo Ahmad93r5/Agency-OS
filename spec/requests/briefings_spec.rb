@@ -9,9 +9,9 @@ RSpec.describe "Briefings API", type: :request do
 
   it "returns briefings for the client" do
     client.briefing_documents.create(content: "Test briefing")
-    
+
     get "/workspaces/#{workspace.id}/clients/#{client.id}/briefings", headers: headers
-    
+
     expect(response).to have_http_status(:ok)
   end
 end

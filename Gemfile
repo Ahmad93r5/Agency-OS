@@ -48,8 +48,8 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
   gem "jwt"
- 
-  gem 'rspec-rails'
+
+  gem "rspec-rails"
   # For webscoket/actioncable
   gem "redis", "~> 5.0"
   gem "fiddle"
