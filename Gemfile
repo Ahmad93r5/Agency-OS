@@ -51,7 +51,7 @@ group :development, :test do
 
   gem "rspec-rails"
   # For webscoket/actioncable
-  gem "redis", "~> 5.0"
+  gem "redis", "~> 6.0"
   gem "fiddle"
   gem "groq"
   gem "dotenv-rails"
