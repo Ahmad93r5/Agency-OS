@@ -14,11 +14,7 @@ export default function Dashboard() {
   //  Fetch dashboard data
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        router.push("/login");
-        return;
-      }
+     
 
       try {
         // User info

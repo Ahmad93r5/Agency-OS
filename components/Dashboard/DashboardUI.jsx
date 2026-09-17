@@ -4,7 +4,7 @@ export default function DashboardUI({
   user,
   stats,
   loading,
-  handleLogout,
+  // handleLogout,
   handleNavigate,
 }) {
   return (

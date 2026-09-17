@@ -12,9 +12,15 @@ export async function apiRequest(url, options = {}) {
     },
   });
 
-
   if (!response.ok) {
-    throw new Error("Api Request Failed");
+   
+    const errorData = await response.json().catch(() => ({}));
+
+    const error = new Error("Api Request Failed");
+    error.errors = errorData.errors || [];   
+    error.status = response.status;         
+
+    throw error;
   }
 
   const text = await response.text();

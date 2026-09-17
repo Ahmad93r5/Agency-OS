@@ -49,7 +49,8 @@ export default function RootLayout({ children }) {
           {/* ✅ Right side: Navbar + Scrollable Content */}
           <div className="flex-1 flex flex-col h-screen">
             {/* ✅ Navbar Fixed */}
-            <Navbar user={user} />
+            <Navbar user={user}
+             />
 
             {/* ✅ Sirf Content Scroll Hoga */}
             <main className="flex-1 overflow-y-auto p-8 bg-gray-100">

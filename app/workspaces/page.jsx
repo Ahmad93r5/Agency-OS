@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiRequest } from "@/lib/api"; 
 import WorkspacesUI from "@/components/Workspace/WorkspacesUI";
-import Navbar from "@/components/layout/Navbar";
 
 export default function Workspaces() {
   const [workspaces, setWorkspaces] = useState([]);
@@ -19,11 +18,7 @@ export default function Workspaces() {
 
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
+  
 
     const fetchWorkspaces = async () => {
       setLoading(true);
@@ -113,10 +108,7 @@ export default function Workspaces() {
   };
 
   
-  const Logout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
-  };
+  
 
   return (
     <>
@@ -135,9 +127,7 @@ export default function Workspaces() {
       loading={loading}
       error={error}
     />
-    <Navbar  
-          Logout={Logout}
-          />
+   
     </>
   );
 }

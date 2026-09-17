@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { apiRequest } from "@/lib/api";
 import SignupForm from "@/components/Auth/SignupForm";
@@ -13,6 +13,15 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +40,12 @@ export default function Signup() {
       router.push("/login");
     } catch (error) {
       console.error("Signup error:", error);
-      setError("Signup failed. Please try again.");
+
+      if (error.errors && error.errors.length > 0) {
+        setError(error.errors[0]);   
+      } else {
+        setError("Signup failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -46,9 +60,9 @@ export default function Signup() {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
-       loading={loading}  
-       error={error}        
-       setError={setError} 
+      loading={loading}
+      error={error}
+      setError={setError}
     />
   );
 }
