@@ -52,12 +52,18 @@ class NotesController < ApplicationController
   private
 
   def current_client
-    @client = Client.find_by(id: params[:client_id])
+  @workspace = @current_user.workspaces.find_by(id: params[:workspace_id])
 
-    if @client.nil?
-      render json: { error: "Client not found" }, status: :not_found
-    end
+  if @workspace.nil?
+    return render json: { error: "Workspace not found" }, status: :not_found
   end
+
+  @client = @workspace.clients.find_by(id: params[:client_id])
+
+  if @client.nil?
+    render json: { error: "Client not found" }, status: :not_found
+  end
+end
 
   def set_note
     @note = @client.notes.find_by(id: params[:id])
