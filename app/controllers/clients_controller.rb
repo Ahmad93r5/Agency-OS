@@ -1,5 +1,5 @@
 class ClientsController < ApplicationController
-  before_action :current_workspace
+  before_action :current_workspace, only: [:index, :show, :create, :update, :destroy, :briefings]
   before_action :set_client, only: [ :show, :update, :destroy, :briefings ]
 
   def index
@@ -32,6 +32,26 @@ class ClientsController < ApplicationController
   def destroy
     @client.destroy
     head :no_content
+  end
+
+  def all_clients
+    @clients = Client.joins(:workspace)
+                     .where(workspaces: { user_id: @current_user.id })
+                     .includes(:workspace)
+                     .order(created_at: :desc)
+
+    render json: @clients.map { |client|
+      {
+        id: client.id,
+        name: client.name,
+        email: client.email,
+        phone: client.phone,
+        workspace: {
+          id: client.workspace.id,
+          name: client.workspace.name
+        }
+      }
+    }
   end
 
 
