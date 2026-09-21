@@ -1,5 +1,5 @@
 class ClientsController < ApplicationController
-  before_action :current_workspace, only: [:index, :show, :create, :update, :destroy, :briefings]
+  before_action :current_workspace, only: [ :index, :show, :create, :update, :destroy, :briefings ]
   before_action :set_client, only: [ :show, :update, :destroy, :briefings ]
 
   def index

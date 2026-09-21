@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   post "/login", to: "authentication#login"
   get "/users", to: "users#index"
 
-  get "/clients", to: "clients#all_clients"    
+  get "/clients", to: "clients#all_clients"
   get    "profile",         to: "users#show"
   patch  "profile",         to: "users#update"
   patch  "change_password", to: "users#change_password"

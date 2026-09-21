@@ -34,15 +34,15 @@ class UsersController < ApplicationController
   # PATCH /change_password
   def change_password
     unless @current_user.authenticate(params[:current_password])
-      return render json: { errors: ["Current password is incorrect"] }, status: :unprocessable_entity
+      return render json: { errors: [ "Current password is incorrect" ] }, status: :unprocessable_entity
     end
 
     if params[:new_password].blank? || params[:new_password].length < 6
-      return render json: { errors: ["New password must be at least 6 characters"] }, status: :unprocessable_entity
+      return render json: { errors: [ "New password must be at least 6 characters" ] }, status: :unprocessable_entity
     end
 
     if params[:new_password] != params[:new_password_confirmation]
-      return render json: { errors: ["New passwords do not match"] }, status: :unprocessable_entity
+      return render json: { errors: [ "New passwords do not match" ] }, status: :unprocessable_entity
     end
 
     if @current_user.update(password: params[:new_password])
