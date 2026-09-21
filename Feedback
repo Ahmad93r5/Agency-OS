@@ -1,0 +1,27 @@
+Workspace ==>  Errro in validation --- correct error name  & error message disappear after some time ✅
+client --> popup  to center & phone optional bug ✅
+
+HTTp Method coorect way ma lihknay  ✅
+
+workspcae -- Jbuilder files✅
+ use partial in jbuilder✅
+
+find or find_BY✅
+controller update krna ✅
+
+workspace = @current_user.workspaces.find(params[:id])  --> in before action ✅
+
+schema.rb --> add same validation in db ✅
+
+frontend----------
+search ---> middelware  ✅
+logout -- create component
+
+create data state global --- (edit, destroy)
+-----------------------------------------------------------------------
+
+Correct Whole UI
+Add back btn on every page
+show clients thrrough sidebar btn (client)
+try to generate Ai briefinf of single note
+

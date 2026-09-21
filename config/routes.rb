@@ -1,24 +1,30 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  mount ActionCable.server => "/cable"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-    resources :workspaces, only: [ :index, :show, :update, :destroy ]
-    post "/signup", to: "authentication#signup"
-    post "/login", to: "authentication#login"
-    get "/users", to: "users#index"
-    post "/workspaces", to: "workspaces#create"
+  # Auth
+  post "/signup", to: "authentication#signup"
+  post "/login", to: "authentication#login"
+  get "/users", to: "users#index"
 
-    resources :workspaces do
-     resources :clients, only: [ :index, :show, :create, :update, :destroy ]
-    end
-        #Route for client notes
-     resources :workspaces do
+  get "/clients", to: "clients#all_clients"
+  get    "profile",         to: "users#show"
+  patch  "profile",         to: "users#update"
+  patch  "change_password", to: "users#change_password"
+
+
+  resources :workspaces do
     resources :clients do
-      resources :notes, only: [:index, :create]  
+      member do
+        get :briefings
+      end
+
+      resources :notes, only: [ :index, :create, :update, :destroy ] do
+        collection do
+          post :generate_briefing
+        end
+      end
     end
   end
-
 end
