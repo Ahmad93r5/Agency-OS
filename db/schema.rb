@@ -68,6 +68,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_10_104821) do
     t.index ["client_id"], name: "index_notes_on_client_id"
   end
 
+  create_table "playing_with_neon", id: :serial, force: :cascade do |t|
+    t.text "name", null: false
+    t.float "value", limit: 24
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", null: false
