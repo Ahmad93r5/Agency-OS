@@ -3,7 +3,9 @@ export async function apiRequest(url, options = {}) {
 
   const isFormData = options.body instanceof FormData;
 
-  const response = await fetch(`http://127.0.0.1:3001${url}`, {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+
+  const response = await fetch(`${API_URL}${url}`, {
     ...options,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -13,12 +15,11 @@ export async function apiRequest(url, options = {}) {
   });
 
   if (!response.ok) {
-   
     const errorData = await response.json().catch(() => ({}));
 
     const error = new Error("Api Request Failed");
-    error.errors = errorData.errors || [];   
-    error.status = response.status;         
+    error.errors = errorData.errors || [];
+    error.status = response.status;
 
     throw error;
   }
