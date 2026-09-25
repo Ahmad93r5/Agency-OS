@@ -8,23 +8,23 @@ export default function SignupForm({
   password,
   setPassword,
   handleSubmit,
-  loading,    
-  error,      
+  loading,
+  error,
   setError,
 }) {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-6">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8">
+        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
           Create your account
         </h1>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 flex items-center justify-between">
-            <span>{error}</span>
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 flex items-center justify-between gap-2">
+            <span className="text-sm md:text-base">{error}</span>
             <button
               onClick={() => setError(null)}
-              className="text-red-700 hover:text-red-900"
+              className="text-red-700 hover:text-red-900 shrink-0"
             >
               ✕
             </button>
@@ -46,7 +46,7 @@ export default function SignupForm({
               id="name"
               name="name"
               required
-              className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
+              className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500 text-sm md:text-base"
             />
           </div>
 
@@ -64,7 +64,7 @@ export default function SignupForm({
               id="email"
               name="email"
               required
-              className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
+              className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500 text-sm md:text-base"
             />
           </div>
 
@@ -82,14 +82,14 @@ export default function SignupForm({
               id="password"
               name="password"
               required
-              className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500"
+              className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-gray-500 text-sm md:text-base"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gray-900 cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition disabled:opacity-50"
+            className="w-full bg-gray-900 cursor-pointer text-white py-2 rounded-md hover:bg-gray-800 transition disabled:opacity-50 text-sm md:text-base"
           >
             {loading ? "Signing up..." : "Sign up"}
           </button>
@@ -97,7 +97,10 @@ export default function SignupForm({
 
         <div className="text-center mt-5 text-sm text-gray-600">
           Already have an account?{" "}
-          <Link href="/login" className="text-gray-900 font-medium hover:underline">
+          <Link
+            href="/login"
+            className="text-gray-900 font-medium hover:underline"
+          >
             Login
           </Link>
         </div>

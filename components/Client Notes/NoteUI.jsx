@@ -18,42 +18,51 @@ export default function NotesUI({
   handleFileChange,
   file,
   briefing,
-  isLoadingBriefing,   
+  isLoadingBriefing,
   briefingError,
   setBriefingError,
   handleGenerateBriefing,
   setBriefing,
-  briefingHistory
+  briefingHistory,
 }) {
   return (
     <div className="min-h-screen bg-gray-100">
-      <main className="flex-1 p-8">
-            <button
-                   onClick={() => window.history.back()}
-                   className="mb-4 inline-flex items-center gap-1 bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-100 hover:text-gray-900 transition text-sm shadow-sm">
-                Back  
-            </button>
+      <main className="flex-1 p-4 md:p-8">
+        <button
+          onClick={() => window.history.back()}
+          className="mb-4 inline-flex items-center gap-1 bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-100 hover:text-gray-900 transition text-sm shadow-sm"
+        >
+          ← Back
+        </button>
 
-        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Notes</h1>
+        <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+          Notes
+        </h1>
 
         {/* Error */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 flex items-center justify-between">
-            <span>{error}</span>
-            <button onClick={() => setError(null)} className="text-red-700 hover:text-red-900">
-              
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 flex items-center justify-between gap-2">
+            <span className="text-sm md:text-base">{error}</span>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-700 hover:text-red-900 shrink-0"
+            >
+              ✕
             </button>
           </div>
         )}
 
         {/* Add Note Form */}
-        <form onSubmit={handleAddNote} className="bg-white p-4 rounded-lg border mb-6">
+        <form
+          onSubmit={handleAddNote}
+          className="bg-white p-4 rounded-lg border mb-6"
+        >
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Write a note..."
             rows={3}
-            className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-blue-500"
+            className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-blue-500 text-sm md:text-base"
             required
           />
 
@@ -67,7 +76,7 @@ export default function NotesUI({
           <button
             type="submit"
             disabled={isAdding}
-            className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+            className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50 text-sm md:text-base w-full sm:w-auto"
           >
             {isAdding ? "Adding..." : "Add Note"}
           </button>
@@ -76,19 +85,21 @@ export default function NotesUI({
         {loading && <p className="text-gray-500">Loading notes...</p>}
 
         {!loading && notes.length === 0 && (
-          <div className="bg-white rounded-lg border p-8 text-center">
-            <p className="text-gray-500">No notes yet. Add your first note!</p>
+          <div className="bg-white rounded-lg border p-6 md:p-8 text-center">
+            <p className="text-gray-500">
+              No notes yet. Add your first note!
+            </p>
           </div>
         )}
 
-        {/*  AI Briefing Section */}
+        {/* AI Briefing Section */}
         <div className="bg-white p-4 rounded-lg border mb-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <h3 className="font-semibold text-gray-800">🤖 AI Briefing</h3>
             <button
               onClick={handleGenerateBriefing}
               disabled={isLoadingBriefing}
-              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition disabled:opacity-50"
+              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition disabled:opacity-50 text-sm md:text-base w-full sm:w-auto"
             >
               {isLoadingBriefing ? "Generating..." : "Generate AI Briefing"}
             </button>
@@ -96,13 +107,13 @@ export default function NotesUI({
 
           {/* Briefing Error */}
           {briefingError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md flex items-center justify-between">
-              <span>{briefingError}</span>
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md flex items-center justify-between gap-2">
+              <span className="text-sm md:text-base">{briefingError}</span>
               <button
                 onClick={() => setBriefingError(null)}
-                className="text-red-700 hover:text-red-900"
+                className="text-red-700 hover:text-red-900 shrink-0"
               >
-                
+                ✕
               </button>
             </div>
           )}
@@ -116,34 +127,38 @@ export default function NotesUI({
             </div>
           )}
 
-
-          
-            {briefing && (
-              <div className="bg-gray-50 text-gray-800 p-4 rounded-md border relative">
-                {/*  Close Button */}
-                <button
-                  onClick={() => setBriefing(null)}
-                  className="absolute top-2 right-2 text-gray-400 hover:text-red-600 transition"
-                  title="Close briefing"
-                >
-                  Close
-                </button>
-                <div className="whitespace-pre-wrap pr-6">
-                  {briefing}
-                </div>
+          {briefing && (
+            <div className="bg-gray-50 text-gray-800 p-4 rounded-md border relative">
+              {/* Close Button */}
+              <button
+                onClick={() => setBriefing(null)}
+                className="absolute top-2 right-2 text-gray-400 hover:text-red-600 transition text-xs"
+                title="Close briefing"
+              >
+                ✕
+              </button>
+              <div className="whitespace-pre-wrap pr-6 text-sm md:text-base">
+                {briefing}
               </div>
-            )}
+            </div>
+          )}
         </div>
 
-          {briefingHistory && briefingHistory.length > 0 && (
+        {/* Briefing History */}
+        {briefingHistory && briefingHistory.length > 0 && (
           <div className="bg-white p-4 rounded-lg border mb-6">
-            <h3 className="font-semibold text-gray-800 mb-3">📜 Briefing History</h3>
+            <h3 className="font-semibold text-gray-800 mb-3">
+              📜 Briefing History
+            </h3>
             {briefingHistory.map((item) => (
-              <div key={item.id} className="bg-gray-50 p-3 rounded-md border mb-2">
-                <p className="text-sm text-gray-500 mb-1">
+              <div
+                key={item.id}
+                className="bg-gray-50 p-3 rounded-md border mb-2"
+              >
+                <p className="text-xs md:text-sm text-gray-500 mb-1">
                   {new Date(item.created_at).toLocaleString()}
                 </p>
-                <p className="text-gray-800 whitespace-pre-wrap text-sm">
+                <p className="text-gray-800 whitespace-pre-wrap text-xs md:text-sm">
                   {item.content}
                 </p>
               </div>
@@ -151,26 +166,28 @@ export default function NotesUI({
           </div>
         )}
 
-        {/*  Notes List */}
+        {/* Notes List */}
         {!loading &&
           notes.map((note) => (
             <div
               key={note.id}
-              className="bg-white p-4 mb-3 rounded-lg border flex items-start justify-between hover:shadow-sm transition"
+              className="bg-white p-4 mb-3 rounded-lg border flex flex-col md:flex-row md:items-start md:justify-between gap-3 hover:shadow-sm transition"
             >
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 {editNoteId === note.id ? (
                   // Edit Mode
                   <div>
                     <textarea
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
-                      className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-blue-500"
+                      className="w-full border border-gray-300 text-black rounded-md px-3 py-2 outline-none focus:border-blue-500 text-sm md:text-base"
                       rows={2}
                     />
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex flex-wrap gap-2 mt-2">
                       <button
-                        onClick={() => handleUpdateNote(note.id, editContent)}
+                        onClick={() =>
+                          handleUpdateNote(note.id, editContent)
+                        }
                         className="bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-700 transition text-sm"
                       >
                         Save
@@ -189,7 +206,9 @@ export default function NotesUI({
                 ) : (
                   // View Mode
                   <div>
-                    <p className="text-gray-800">{note.content}</p>
+                    <p className="text-gray-800 wrap-break-word text-sm md:text-base">
+                      {note.content}
+                    </p>
 
                     {/* Show File if attached */}
                     {note.file_url && (
@@ -200,12 +219,12 @@ export default function NotesUI({
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline text-sm flex items-center gap-1"
                         >
-                           View Attachment
+                          📎 View Attachment
                         </a>
                       </div>
                     )}
 
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-xs md:text-sm text-gray-500 mt-1">
                       {new Date(note.created_at).toLocaleString()}
                     </p>
                   </div>
@@ -214,7 +233,7 @@ export default function NotesUI({
 
               {/* Action Buttons */}
               {editNoteId !== note.id && (
-                <div className="flex gap-2 ml-4">
+                <div className="flex flex-wrap gap-2 md:ml-4 md:shrink-0">
                   <button
                     onClick={() => {
                       setEditNoteId(note.id);
