@@ -1,6 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import {
+  ArrowLeft,
+  Plus,
+  X,
+  User,
+  Mail,
+  Phone,
+  FileText,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 
 export default function ClientsUI({
   clients,
@@ -28,9 +39,10 @@ export default function ClientsUI({
       <main className="flex-1 p-4 md:p-8">
         <button
           onClick={() => window.history.back()}
-          className="mb-4 inline-flex items-center gap-1 bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-100 hover:text-gray-900 transition text-sm shadow-sm"
+          className="mb-4 inline-flex items-center gap-1.5 bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-100 hover:text-gray-900 transition text-sm shadow-sm active:scale-95"
         >
-          ← Back
+          <ArrowLeft size={14} />
+          Back
         </button>
 
         {/* Header */}
@@ -40,9 +52,13 @@ export default function ClientsUI({
           </h1>
           <button
             onClick={() => addDialogRef.current.showModal()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-sm md:text-base w-full sm:w-auto"
+            className="group bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-sm md:text-base w-full sm:w-auto flex items-center justify-center gap-2 active:scale-95"
           >
-            + Add Client
+            <Plus
+              size={16}
+              className="transition-transform group-hover:rotate-90 duration-300"
+            />
+            Add Client
           </button>
         </div>
 
@@ -54,7 +70,7 @@ export default function ClientsUI({
               onClick={() => setError(null)}
               className="text-red-700 hover:text-red-900 shrink-0"
             >
-              ✕
+              <X size={16} />
             </button>
           </div>
         )}
@@ -78,23 +94,35 @@ export default function ClientsUI({
               key={client.id}
               className="bg-white p-4 mb-3 rounded-lg border border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3 hover:shadow-sm transition"
             >
-              <div className="min-w-0">
-                <p className="font-medium text-gray-800 wrap-break-word">
-                  {client.name}
-                </p>
-                <p className="text-sm text-gray-500 wrap-break-word">
-                  {client.email}
-                </p>
-                {client.phone && (
-                  <p className="text-sm text-gray-500">{client.phone}</p>
-                )}
+              {/* Client info with avatar */}
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold shrink-0">
+                  {client.name?.charAt(0).toUpperCase() || "?"}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="font-medium text-gray-800 wrap-break-word truncate">
+                    {client.name}
+                  </p>
+                  <p className="text-sm text-gray-500 wrap-break-word truncate flex items-center gap-1">
+                    <Mail size={12} />
+                    {client.email}
+                  </p>
+                  {client.phone && (
+                    <p className="text-sm text-gray-500 flex items-center gap-1">
+                      <Phone size={12} />
+                      {client.phone}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="flex flex-wrap gap-2 md:shrink-0">
                 <Link
                   href={`/workspaces/${workspaceId}/clients/${client.id}/notes`}
-                  className="bg-purple-600 text-white px-3 py-1 rounded-md hover:bg-purple-700 transition text-sm"
+                  className="bg-purple-600 text-white px-3 py-1.5 rounded-md hover:bg-purple-700 transition text-sm flex items-center gap-1.5 active:scale-95"
                 >
+                  <FileText size={14} />
                   View Notes
                 </Link>
                 <button
@@ -107,8 +135,9 @@ export default function ClientsUI({
                     });
                     editDialogRef.current.showModal();
                   }}
-                  className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition text-sm"
+                  className="bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 transition text-sm flex items-center gap-1.5 active:scale-95"
                 >
+                  <Pencil size={14} />
                   Edit
                 </button>
                 <button
@@ -116,8 +145,9 @@ export default function ClientsUI({
                     setDeleteId(client.id);
                     deleteDialogRef.current.showModal();
                   }}
-                  className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition text-sm"
+                  className="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 transition text-sm flex items-center gap-1.5 active:scale-95"
                 >
+                  <Trash2 size={14} />
                   Delete
                 </button>
               </div>
@@ -136,9 +166,9 @@ export default function ClientsUI({
               </h3>
               <button
                 onClick={() => addDialogRef.current.close()}
-                className="text-gray-400 hover:text-gray-600 transition text-2xl"
+                className="text-gray-400 hover:text-gray-600 transition p-1 hover:bg-gray-100 rounded-md"
               >
-                ✕
+                <X size={20} />
               </button>
             </div>
 
@@ -197,14 +227,14 @@ export default function ClientsUI({
                 <button
                   type="button"
                   onClick={() => addDialogRef.current.close()}
-                  className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium text-sm md:text-base"
+                  className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium text-sm md:text-base active:scale-95"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isAdding}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-medium text-sm md:text-base"
+                  className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-medium text-sm md:text-base active:scale-95"
                 >
                   {isAdding ? "Saving..." : "Save"}
                 </button>
@@ -225,9 +255,9 @@ export default function ClientsUI({
               </h3>
               <button
                 onClick={() => editDialogRef.current.close()}
-                className="text-gray-400 hover:text-gray-600 transition text-2xl"
+                className="text-gray-400 hover:text-gray-600 transition p-1 hover:bg-gray-100 rounded-md"
               >
-                ✕
+                <X size={20} />
               </button>
             </div>
 
@@ -286,14 +316,14 @@ export default function ClientsUI({
                 <button
                   type="button"
                   onClick={() => editDialogRef.current.close()}
-                  className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium text-sm md:text-base"
+                  className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium text-sm md:text-base active:scale-95"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isEditing}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-medium text-sm md:text-base"
+                  className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-medium text-sm md:text-base active:scale-95"
                 >
                   {isEditing ? "Updating..." : "Update"}
                 </button>
@@ -314,9 +344,9 @@ export default function ClientsUI({
               </h3>
               <button
                 onClick={() => deleteDialogRef.current.close()}
-                className="text-gray-400 hover:text-gray-600 transition text-2xl"
+                className="text-gray-400 hover:text-gray-600 transition p-1 hover:bg-gray-100 rounded-md"
               >
-                ✕
+                <X size={20} />
               </button>
             </div>
 
@@ -328,16 +358,23 @@ export default function ClientsUI({
             <div className="flex gap-3">
               <button
                 onClick={() => deleteDialogRef.current.close()}
-                className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium text-sm md:text-base"
+                className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 transition font-medium text-sm md:text-base active:scale-95"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex-1 bg-red-600 text-white px-4 py-2.5 rounded-lg hover:bg-red-700 transition disabled:opacity-50 font-medium text-sm md:text-base"
+                className="flex-1 bg-red-600 text-white px-4 py-2.5 rounded-lg hover:bg-red-700 transition disabled:opacity-50 font-medium text-sm md:text-base flex items-center justify-center gap-1.5 active:scale-95"
               >
-                {isDeleting ? "Deleting..." : "Delete"}
+                {isDeleting ? (
+                  "Deleting..."
+                ) : (
+                  <>
+                    <Trash2 size={14} />
+                    Delete
+                  </>
+                )}
               </button>
             </div>
           </div>

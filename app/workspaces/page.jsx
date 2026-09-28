@@ -1,43 +1,41 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { apiRequest } from "@/lib/api"; 
+import { useEffect, useState, useCallback } from "react";
+import { apiRequest } from "@/lib/api";
 import WorkspacesUI from "@/components/Workspace/WorkspacesUI";
 
 export default function Workspaces() {
   const [workspaces, setWorkspaces] = useState([]);
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceEditName, setWorkspaceEditName] = useState("");
-  
   const [editingId, setEditingId] = useState(null);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState(null);
-  const router = useRouter();
 
+  //  useCallback — fetchWorkspaces
+  const fetchWorkspaces = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await apiRequest("/workspaces");
+      setWorkspaces(data);
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Failed to load workspaces");
+
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-  
-
-    const fetchWorkspaces = async () => {
-      setLoading(true);
-      try {
-        const data = await apiRequest("/workspaces");
-        setWorkspaces(data);
-      } catch (error) {
-        console.error("Error:", error);
-        setError("Failed to load workspaces");
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchWorkspaces();
-  }, [router]);
+  }, [fetchWorkspaces]);
 
-  
-  const refreshWorkspaces = async () => {
+  //  useCallback — refreshWorkspaces
+  const refreshWorkspaces = useCallback(async () => {
     try {
       const data = await apiRequest("/workspaces");
       setWorkspaces(data);
@@ -45,14 +43,14 @@ export default function Workspaces() {
       console.error("Error:", error);
       setError("Failed to refresh workspaces");
 
-       setTimeout(() => {
-          setError(null);
-        }, 3000);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
     }
-  };
+  }, []);
 
-  // Create 
-  const createWorkspace = async () => {
+  //  useCallback — createWorkspace
+  const createWorkspace = useCallback(async () => {
     try {
       await apiRequest("/workspaces", {
         method: "POST",
@@ -64,55 +62,56 @@ export default function Workspaces() {
       console.error("Error:", error);
       setError("Failed to create workspace");
 
-       setTimeout(() => {
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+  }, [workspaceName, refreshWorkspaces]);
+
+  // useCallback — editWorkspace
+  const editWorkspace = useCallback(
+    async (workspaceId) => {
+      try {
+        await apiRequest(`/workspaces/${workspaceId}`, {
+          method: "PUT",
+          body: JSON.stringify({ name: workspaceEditName }),
+        });
+        setWorkspaceEditName("");
+        setEditingId(null);
+        await refreshWorkspaces();
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Failed to edit workspace");
+
+        setTimeout(() => {
           setError(null);
         }, 3000);
-    }
-  };
+      }
+    },
+    [workspaceEditName, refreshWorkspaces]
+  );
 
-  // Edit 
-  const editWorkspace = async (workspaceId) => {
-    try {
-      await apiRequest(`/workspaces/${workspaceId}`, {
-        method: "PUT",
-        body: JSON.stringify({ name: workspaceEditName }),
-      });
-      setWorkspaceEditName("");
-      setEditingId(null);
-      await refreshWorkspaces();
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to edit workspace");
+  //  useCallback — deleteWorkspace
+  const deleteWorkspace = useCallback(
+    async (workspaceId) => {
+      try {
+        await apiRequest(`/workspaces/${workspaceId}`, {
+          method: "DELETE",
+        });
+        await refreshWorkspaces();
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Failed to delete workspace");
 
-         setTimeout(() => {
+        setTimeout(() => {
           setError(null);
         }, 3000);
-    }
-  };
-
-  // Delete 
-  const deleteWorkspace = async (workspaceId) => {
-    try {
-      await apiRequest(`/workspaces/${workspaceId}`, {
-        method: "DELETE",
-      });
-      await refreshWorkspaces();
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to delete workspace");
-
-       setTimeout(() => {
-          setError(null);
-        }, 3000);
-    }
-  };
-
-  
-  
+      }
+    },
+    [refreshWorkspaces]
+  );
 
   return (
-    <>
-    
     <WorkspacesUI
       workspaces={workspaces}
       workspaceName={workspaceName}
@@ -127,7 +126,5 @@ export default function Workspaces() {
       loading={loading}
       error={error}
     />
-   
-    </>
   );
 }

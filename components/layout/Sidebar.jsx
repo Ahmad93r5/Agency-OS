@@ -1,96 +1,136 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import {
+  LayoutDashboard,
+  Building2,
+  Users,
+  Settings,
+  Menu,
+  X,
+} from "lucide-react";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const navItems = [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/workspaces", label: "Workspaces" },
-    { href: "/clients", label: "Clients" },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/workspaces", label: "Workspaces", icon: Building2 },
+    { href: "/clients", label: "Clients", icon: Users },
   ];
+
+  const isActive = (href) => pathname === href || pathname.startsWith(href + "/");
 
   return (
     <>
-      {/*  Mobile Hamburger Button */}
+      {/* Mobile Hamburger Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md border border-gray-200 text-gray-700"
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md border border-gray-200 text-gray-700 hover:bg-gray-100 transition"
         aria-label="Open menu"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
+        <Menu size={24} />
       </button>
 
-      {/*  Mobile Overlay */}
+      {/* Mobile Overlay */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
         />
       )}
 
-      {/*  Sidebar */}
+      {/* Sidebar */}
       <aside
         className={`
           fixed md:static top-0 left-0 h-screen w-64 bg-white border-r border-gray-200
-          px-5 py-6 flex flex-col z-40 transition-transform duration-300
+          px-4 py-6 flex flex-col z-40 transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       >
-        {/* Close Button (Mobile) */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-lg font-semibold text-gray-800">Agency OS</h2>
+        {/* Logo / Close Button */}
+        <div className="flex items-center justify-between mb-8 px-2">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+              A
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Agency OS
+            </h2>
+          </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="md:hidden text-gray-500 hover:text-gray-800"
+            className="md:hidden text-gray-400 hover:text-gray-800 transition"
             aria-label="Close menu"
           >
-            ✕
+            <X size={20} />
           </button>
         </div>
 
         <nav className="flex-1">
-          <ul className="space-y-2">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+          <ul className="space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`
+                      group flex items-center gap-3 px-3 py-2.5 rounded-lg
+                      text-sm font-medium transition-all duration-200
+                      ${
+                        active
+                          ? "bg-blue-50 text-blue-700 shadow-sm"
+                          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:translate-x-0.5"
+                      }
+                    `}
+                  >
+                    <Icon
+                      size={18}
+                      className="transition-transform group-hover:scale-110"
+                    />
+                    <span>{item.label}</span>
+                    {active && (
+                      <span className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
-        {/* Settings — bottom */}
+        {/* Settings — Bottom */}
         <div className="pt-4 border-t border-gray-200">
           <Link
             href="/settings"
             onClick={() => setIsOpen(false)}
-            className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition"
+            className={`
+              group flex items-center gap-3 px-3 py-2.5 rounded-lg
+              text-sm font-medium transition-all duration-200
+              ${
+                isActive("/settings")
+                  ? "bg-blue-50 text-blue-700 shadow-sm"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:translate-x-0.5"
+              }
+            `}
           >
-            Settings
+            <Settings
+              size={18}
+              className="transition-transform group-hover:rotate-90 duration-300"
+            />
+            <span>Settings</span>
+            {isActive("/settings") && (
+              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />
+            )}
           </Link>
         </div>
       </aside>
     </>
-  )
+  );
 }

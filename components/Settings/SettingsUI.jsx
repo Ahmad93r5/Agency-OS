@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  User,
+  Lock,
+  CheckCircle2,
+  XCircle,
+  Save,
+  Loader2,
+} from "lucide-react";
+
 export default function SettingsUI({
   user,
   setUser,
@@ -28,21 +37,24 @@ export default function SettingsUI({
 
         {/* Profile Section */}
         <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6 mb-6">
-          <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">
-            👤 Profile
+          <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <User size={20} className="text-blue-600" />
+            Profile
           </h2>
 
           {/* Success Message */}
           {profileSuccess && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-md mb-4 text-sm">
-              ✅ {profileSuccess}
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-md mb-4 text-sm flex items-center gap-2">
+              <CheckCircle2 size={16} className="shrink-0" />
+              {profileSuccess}
             </div>
           )}
 
           {/* Error Message */}
           {profileError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-md mb-4 text-sm">
-              ❌ {profileError}
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-md mb-4 text-sm flex items-center gap-2">
+              <XCircle size={16} className="shrink-0" />
+              {profileError}
             </div>
           )}
 
@@ -55,7 +67,7 @@ export default function SettingsUI({
                 type="text"
                 value={user.name}
                 onChange={(e) => setUser({ ...user, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                 required
               />
             </div>
@@ -68,7 +80,7 @@ export default function SettingsUI({
                 type="email"
                 value={user.email}
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                 required
               />
             </div>
@@ -76,30 +88,43 @@ export default function SettingsUI({
             <button
               type="submit"
               disabled={savingProfile}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base w-full sm:w-auto"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base w-full sm:w-auto flex items-center justify-center gap-2 active:scale-95"
             >
-              {savingProfile ? "Saving..." : "Save Changes"}
+              {savingProfile ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save size={16} />
+                  Save Changes
+                </>
+              )}
             </button>
           </form>
         </div>
 
         {/* Change Password Section */}
         <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-          <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">
-            🔒 Change Password
+          <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <Lock size={20} className="text-purple-600" />
+            Change Password
           </h2>
 
           {/* Success Message */}
           {passwordSuccess && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-md mb-4 text-sm">
-              ✅ {passwordSuccess}
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded-md mb-4 text-sm flex items-center gap-2">
+              <CheckCircle2 size={16} className="shrink-0" />
+              {passwordSuccess}
             </div>
           )}
 
           {/* Error Message */}
           {passwordError && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-md mb-4 text-sm">
-              ❌ {passwordError}
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-md mb-4 text-sm flex items-center gap-2">
+              <XCircle size={16} className="shrink-0" />
+              {passwordError}
             </div>
           )}
 
@@ -117,7 +142,7 @@ export default function SettingsUI({
                     current_password: e.target.value,
                   })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                 required
               />
             </div>
@@ -135,7 +160,7 @@ export default function SettingsUI({
                     new_password: e.target.value,
                   })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                 required
                 minLength={6}
               />
@@ -154,7 +179,7 @@ export default function SettingsUI({
                     new_password_confirmation: e.target.value,
                   })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm md:text-base"
                 required
                 minLength={6}
               />
@@ -163,9 +188,19 @@ export default function SettingsUI({
             <button
               type="submit"
               disabled={savingPassword}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base w-full sm:w-auto"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base w-full sm:w-auto flex items-center justify-center gap-2 active:scale-95"
             >
-              {savingPassword ? "Updating..." : "Update Password"}
+              {savingPassword ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <Lock size={16} />
+                  Update Password
+                </>
+              )}
             </button>
           </form>
         </div>

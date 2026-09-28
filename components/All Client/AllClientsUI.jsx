@@ -1,5 +1,7 @@
 "use client";
 
+import { Building2, Mail, Users, ChevronRight } from "lucide-react";
+
 export default function AllClientsUI({
   clients,
   loading,
@@ -37,6 +39,9 @@ export default function AllClientsUI({
         {/* Empty State */}
         {!loading && !error && clients.length === 0 && (
           <div className="bg-white border border-gray-200 rounded-lg p-6 md:p-12 text-center">
+            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
+              <Users size={24} className="text-gray-400" />
+            </div>
             <p className="text-gray-500 text-base md:text-lg">No clients yet</p>
             <p className="text-gray-400 text-sm mt-1">
               Add clients from your workspaces
@@ -51,11 +56,11 @@ export default function AllClientsUI({
               <div
                 key={client.id}
                 onClick={() => onClientClick(client.workspace.id, client.id)}
-                className="bg-white border border-gray-200 rounded-lg p-4 md:p-5 hover:shadow-md hover:border-gray-300 transition cursor-pointer"
+                className="group bg-white border border-gray-200 rounded-lg p-4 md:p-5 hover:shadow-md hover:border-gray-300 transition cursor-pointer"
               >
                 <div className="flex items-start gap-3 md:gap-4">
                   {/* Avatar */}
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-base md:text-lg font-semibold shrink-0">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-linear-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-base md:text-lg font-semibold shrink-0">
                     {client.name?.charAt(0).toUpperCase() || "?"}
                   </div>
 
@@ -64,15 +69,23 @@ export default function AllClientsUI({
                     <h3 className="text-base md:text-lg font-semibold text-gray-800 truncate">
                       {client.name}
                     </h3>
-                    <p className="text-sm text-gray-500 mt-0.5 truncate">
+                    <p className="text-sm text-gray-500 mt-0.5 truncate flex items-center gap-1">
+                      <Mail size={12} />
                       {client.email}
                     </p>
 
                     {/* Workspace Badge */}
                     <div className="mt-2 inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full max-w-full">
-                      <span className="truncate">🏢 {client.workspace.name}</span>
+                      <Building2 size={12} className="shrink-0" />
+                      <span className="truncate">{client.workspace.name}</span>
                     </div>
                   </div>
+
+                  {/* Arrow indicator */}
+                  <ChevronRight
+                    size={16}
+                    className="text-gray-300 group-hover:text-gray-500 group-hover:translate-x-0.5 transition-all shrink-0 mt-2"
+                  />
                 </div>
               </div>
             ))}
