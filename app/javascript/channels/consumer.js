@@ -1,5 +1,8 @@
-    import { createConsumer } from "@rails/actioncable";
+import { createConsumer } from "@rails/actioncable";
 
-export default createConsumer("ws://127.0.0.1:3001/cable");  
-  // Browser ko backend ke WebSocket (ws://localhost:3001/cable) se connect karta hai.
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
 
+const CABLE_URL = `${API_URL.replace(/^http/, "ws")}/cable`;
+
+export default createConsumer(CABLE_URL);
