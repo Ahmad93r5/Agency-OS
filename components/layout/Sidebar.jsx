@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";              
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import {
@@ -53,13 +54,24 @@ export default function Sidebar() {
       >
         {/* Logo / Close Button */}
         <div className="flex items-center justify-between mb-8 px-2">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-              A
+          <div className="flex items-center gap-2.5">
+            {/* ✅ Next.js Image component */}
+            <Image
+              src="/logo.png"
+              alt="Agency OS"
+              width={36}
+              height={36}
+              className="w-9 h-9 rounded-lg object-contain"
+              priority
+            />
+            <div>
+              <h2 className="text-base font-bold text-gray-900 leading-tight">
+                Agency OS
+              </h2>
+              <p className="text-xs text-gray-500 leading-tight">
+                Client Management
+              </p>
             </div>
-            <h2 className="text-lg font-semibold text-gray-800">
-              Agency OS
-            </h2>
           </div>
           <button
             onClick={() => setIsOpen(false)}

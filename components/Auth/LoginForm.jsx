@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   X,
   AlertCircle,
@@ -22,11 +23,17 @@ export default function LoginForm({
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-50 to-purple-50 flex items-center justify-center px-4 py-6">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8">
         
-        {/* Header with icon */}
+        {/* Header with Logo */}
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-600 to-purple-600 flex items-center justify-center mx-auto mb-3 shadow-lg">
-            <LogIn size={24} className="text-white" />
-          </div>
+          {/* ✅ Image Logo */}
+          <Image
+            src="/logo.png"
+            alt="Agency OS"
+            width={64}
+            height={64}
+            className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain mb-3"
+            priority
+          />
           <h1 className="text-xl md:text-2xl font-bold text-gray-900">
             Welcome back
           </h1>
