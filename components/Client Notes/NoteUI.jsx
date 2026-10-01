@@ -30,10 +30,9 @@ export default function NotesUI({
   setEditNoteId,
   editContent,
   setEditContent,
-  handleFileChange,
-  file,
-  setFile,
-  handleRemoveFile,
+  handleFilesChange,     // ✅ Multiple
+  files,                 // ✅ Array
+  handleRemoveFile,      // ✅ Remove specific
   fileInputRef,
   briefing,
   isLoadingBriefing,
@@ -89,34 +88,45 @@ export default function NotesUI({
             required
           />
 
-          {/* File Input */}
+          {/* ✅ File Input — multiple */}
           <input
             ref={fileInputRef}
             type="file"
-            onChange={handleFileChange}
+            multiple
+            onChange={handleFilesChange}
             className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
           />
 
-          {/* File Preview with Remove Button */}
-          {file && (
-            <div className="mt-2 flex items-center justify-between bg-gray-50 border border-gray-200 rounded-md px-3 py-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <Paperclip size={14} className="text-gray-500 shrink-0" />
-                <span className="text-sm text-gray-700 truncate">
-                  {file.name}
-                </span>
-                <span className="text-xs text-gray-400 shrink-0">
-                  ({(file.size / 1024).toFixed(1)} KB)
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={handleRemoveFile}
-                className="text-gray-400 hover:text-red-600 transition shrink-0 ml-2"
-                title="Remove file"
-              >
-                <X size={16} />
-              </button>
+          {/* ✅ Multiple Files Preview */}
+          {files.length > 0 && (
+            <div className="mt-2 space-y-1.5">
+              {files.map((f, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-md px-3 py-2"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Paperclip size={14} className="text-gray-500 shrink-0" />
+                    <span className="text-sm text-gray-700 truncate">
+                      {f.name}
+                    </span>
+                    <span className="text-xs text-gray-400 shrink-0">
+                      ({(f.size / 1024).toFixed(1)} KB)
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFile(index)}
+                    className="text-gray-400 hover:text-red-600 transition shrink-0 ml-2"
+                    title="Remove file"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
+              <p className="text-xs text-gray-500">
+                {files.length} file{files.length > 1 ? "s" : ""} selected
+              </p>
             </div>
           )}
 
@@ -207,7 +217,6 @@ export default function NotesUI({
 
           {briefing && (
             <div className="bg-gray-50 text-gray-800 p-4 rounded-md border border-gray-200 relative">
-              {/* Close Button */}
               <button
                 onClick={() => setBriefing(null)}
                 className="absolute top-2 right-2 text-gray-400 hover:text-red-600 transition p-1 hover:bg-gray-200 rounded-md"
@@ -254,7 +263,6 @@ export default function NotesUI({
             >
               <div className="flex-1 min-w-0">
                 {editNoteId === note.id ? (
-                  // Edit Mode
                   <div>
                     <textarea
                       value={editContent}
@@ -285,24 +293,29 @@ export default function NotesUI({
                     </div>
                   </div>
                 ) : (
-                  // View Mode
                   <div>
                     <p className="text-gray-800 wrap-break-word text-sm md:text-base">
                       {note.content}
                     </p>
 
-                    {/* Show File if attached */}
-                    {note.file_url && (
-                      <div className="mt-2">
-                        <a
-                          href={note.file_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline text-sm inline-flex items-center gap-1.5"
-                        >
-                          <Paperclip size={14} />
-                          View Attachment
-                        </a>
+                    {/* ✅ Multiple Files Display */}
+                    {note.files && note.files.length > 0 && (
+                      <div className="mt-2 space-y-1">
+                        {note.files.map((file) => (
+                          <a
+                            key={file.id}
+                            href={file.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline text-sm flex items-center gap-1.5"
+                          >
+                            <Paperclip size={14} />
+                            {file.filename}
+                            <span className="text-xs text-gray-400">
+                              ({(file.size / 1024).toFixed(1)} KB)
+                            </span>
+                          </a>
+                        ))}
                       </div>
                     )}
 
@@ -313,7 +326,6 @@ export default function NotesUI({
                 )}
               </div>
 
-              {/* Action Buttons */}
               {editNoteId !== note.id && (
                 <div className="flex flex-wrap gap-2 md:ml-4 md:shrink-0">
                   <button
