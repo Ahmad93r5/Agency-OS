@@ -1,27 +1,22 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
-  // 1️⃣ Token cookie se lo
   const token = request.cookies.get("token");
+  const { pathname } = request.nextUrl;
 
- 
-  const protectedRoutes = ["/dashboard", "/workspaces", "/clients", "/notes"];
+  const protectedRoutes = ["/dashboard", "/workspaces", "/clients", "/notes", "/settings"];
+  const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
-
-  if (isProtectedRoute && !token) {
+  if (isProtected && !token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (request.nextUrl.pathname === "/login" && token) {
+  if ((pathname === "/login" || pathname === "/signup") && token) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
 }
-
 
 export const config = {
   matcher: [
@@ -29,6 +24,8 @@ export const config = {
     "/workspaces/:path*",
     "/clients/:path*",
     "/notes/:path*",
+    "/settings/:path*",
     "/login",
+    "/signup",
   ],
 };

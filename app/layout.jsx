@@ -8,7 +8,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import Navbar from "@/components/layout/Navbar";
 import "./globals.css";
 
-//  Inter font setup
+// Inter font setup
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -18,13 +18,15 @@ export default function RootLayout({ children }) {
   const [user, setUser] = useState(null);
   const pathname = usePathname();
 
-  // Auth pages check karo
+  // ✅ Landing + Auth pages — Sidebar/Navbar hide
+  const isLandingPage = pathname === "/";
   const isAuthPage = pathname === "/login" || pathname === "/signup";
+  const shouldHideNav = isLandingPage || isAuthPage;
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
-      if (!token || isAuthPage) return;
+      if (!token || shouldHideNav) return;
 
       try {
         const data = await apiRequest("/users");
@@ -35,10 +37,10 @@ export default function RootLayout({ children }) {
     };
 
     fetchUser();
-  }, [isAuthPage]);
+  }, [shouldHideNav]);
 
-  // Auth pages pe sirf children show karo (Sidebar/Navbar nahi)
-  if (isAuthPage) {
+  // ✅ Landing + Auth pages pe sirf children show karo
+  if (shouldHideNav) {
     return (
       <html lang="en" className={inter.className}>
         <body>{children}</body>
