@@ -19,6 +19,7 @@ gem "rack-cors"
 gem "jwt"
 gem "groq"
 gem "dotenv-rails"
+gem "aws-sdk-s3", require: false    # ✅ YEH GROUP KE BAHAR ADD KARO
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -29,9 +30,4 @@ group :development, :test do
   gem "redis", "~> 5.0"
   gem "fiddle"
   gem "ruby_parser"
-
-
-  # for supabase
-  gem "aws-sdk-s3", require: false
-
 end
