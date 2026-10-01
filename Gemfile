@@ -29,4 +29,9 @@ group :development, :test do
   gem "redis", "~> 5.0"
   gem "fiddle"
   gem "ruby_parser"
+
+
+  # for supabase
+  gem "aws-sdk-s3", require: false
+
 end
